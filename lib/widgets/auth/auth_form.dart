@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 
 class AuthForm extends StatefulWidget {
+  final bool isLoading;
   final Function(
     String userName,
     String email,
     String pass,
     bool isLogin,
+    BuildContext context,
   ) submitFn;
-  AuthForm(this.submitFn);
+  AuthForm(this.submitFn, this.isLoading);
   @override
   _AuthFormState createState() => _AuthFormState();
 }
@@ -34,6 +36,7 @@ class _AuthFormState extends State<AuthForm> {
         email.trim(),
         password.trim(),
         isLogin,
+        context,
       );
     }
   }
@@ -126,15 +129,16 @@ class _AuthFormState extends State<AuthForm> {
                       }
                     },
                     decoration: InputDecoration(
-                        labelText: 'Password',
-                        suffixIcon: IconButton(
-                          icon: Icon(Icons.remove_red_eye_outlined),
-                          onPressed: () {
-                            setState(() {
-                              hidePass = !hidePass;
-                            });
-                          },
-                        )),
+                      labelText: 'Password',
+                      suffixIcon: IconButton(
+                        icon: Icon(Icons.remove_red_eye_outlined),
+                        onPressed: () {
+                          setState(() {
+                            hidePass = !hidePass;
+                          });
+                        },
+                      ),
+                    ),
                     obscureText: hidePass,
                     onSaved: (newValue) {
                       password = newValue;
@@ -143,21 +147,29 @@ class _AuthFormState extends State<AuthForm> {
                   SizedBox(
                     height: 20,
                   ),
-                  RaisedButton(
-                    child: isLogin ? Text('Login') : Text('Sign up'),
-                    onPressed: trySubmit,
-                  ),
-                  FlatButton(
-                    textColor: Theme.of(context).primaryColor,
-                    child: isLogin
-                        ? Text('Create account')
-                        : Text('I already have an account'),
-                    onPressed: () {
-                      setState(() {
-                        isLogin = !isLogin;
-                      });
-                    },
-                  ),
+                  if (widget.isLoading)
+                    Center(
+                      child: CircularProgressIndicator(
+                        backgroundColor: Theme.of(context).primaryColor,
+                      ),
+                    ),
+                  if (!widget.isLoading)
+                    RaisedButton(
+                      child: isLogin ? Text('Login') : Text('Sign up'),
+                      onPressed: trySubmit,
+                    ),
+                  if (!widget.isLoading)
+                    FlatButton(
+                      textColor: Theme.of(context).primaryColor,
+                      child: isLogin
+                          ? Text('Create account')
+                          : Text('I already have an account'),
+                      onPressed: () {
+                        setState(() {
+                          isLogin = !isLogin;
+                        });
+                      },
+                    ),
                 ],
               ),
             ),

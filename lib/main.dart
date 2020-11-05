@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:firebase_auth/firebase_auth.dart';
+
 import './screens/chat_screen.dart';
 import './screens/auth_screen.dart';
 
@@ -25,7 +27,21 @@ class MyApp extends StatelessWidget {
             ),
           )),
       debugShowCheckedModeBanner: false,
-      home: AuthScreen(),
+      //typical android way
+      // home: FirebaseAuth.instance.currentUser() == null
+      //     ? AuthScreen()
+      //     : ChatScreen(),
+
+      //alternatinve way, here the screen will get changed as soon as
+      //the authstate changes
+      //you don't need to call navigator.of.pushnamed in auth screen as
+      //this method will get called as soon as the authstate changes
+      home: StreamBuilder(
+        stream: FirebaseAuth.instance.onAuthStateChanged,
+        builder: (context, snapshot) {
+          return snapshot.hasData ? ChatScreen() : AuthScreen();
+        },
+      ),
       routes: {
         ChatScreen.routeName: (context) => ChatScreen(),
       },
