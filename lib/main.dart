@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 
-import './screens/chat_screen.dart';
+import 'screens/tabs/chat_screen.dart';
 import './screens/auth_screen.dart';
+import './screens/bottom_navigation.dart';
 
 void main() {
   runApp(MyApp());
@@ -15,9 +16,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'BookLord',
       theme: ThemeData(
+          fontFamily: 'Roboto',
           primarySwatch: Colors.indigo,
           accentColor: Colors.white,
           backgroundColor: Colors.indigo,
+          scaffoldBackgroundColor: Colors.white,
           accentColorBrightness: Brightness.dark,
           buttonTheme: ButtonTheme.of(context).copyWith(
             buttonColor: Colors.indigo,
@@ -39,7 +42,7 @@ class MyApp extends StatelessWidget {
       home: StreamBuilder(
         stream: FirebaseAuth.instance.onAuthStateChanged,
         builder: (context, snapshot) {
-          return snapshot.hasData ? ChatScreen() : AuthScreen();
+          return snapshot.hasData ? BottomNavigationScreen() : AuthScreen();
         },
       ),
       routes: {
