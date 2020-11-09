@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import './tabs/home_screen.dart';
 import './tabs/chat_screen.dart';
 import './tabs/profile_screen.dart';
-import './tabs/my_ads_screen.dart';
+import 'tabs/ads_tab_screen.dart';
+import './tabs/add_product_screen.dart';
 
 class BottomNavigationScreen extends StatefulWidget {
   @override
@@ -22,12 +23,16 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
         'title': 'Home',
       },
       {
-        'pages': ChatScreen(),
-        'title': 'Chats',
+        'pages': AdsTabScreen(),
+        'title': 'My Ads',
       },
       {
-        'pages': MyAds(),
-        'title': 'My Ads',
+        'pages': AddProduct(),
+        'title': 'Sell a Book!',
+      },
+      {
+        'pages': ChatScreen(),
+        'title': 'Chats',
       },
       {
         'pages': ProfileScreen(),
@@ -40,49 +45,42 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          _pages[selectedPageIndex]['title'],
-          style: TextStyle(
-            fontFamily: 'Poppins',
-          ),
-        ),
-      ),
+      appBar: selectedPageIndex == 1
+          ? null
+          : AppBar(
+              title: Text(
+                _pages[selectedPageIndex]['title'],
+                style: TextStyle(
+                  fontFamily: 'Poppins',
+                ),
+              ),
+            ),
       body: _pages[selectedPageIndex]['pages'],
       bottomNavigationBar: BottomNavigationBar(
         elevation: 10,
+        iconSize: 28,
         currentIndex: selectedPageIndex,
         type: BottomNavigationBarType.fixed,
         backgroundColor: Theme.of(context).accentColor,
         selectedItemColor: Theme.of(context).primaryColor,
         unselectedItemColor: Theme.of(context).primaryColor,
-        //showSelectedLabels: false,
-        //showUnselectedLabels: false,
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
         items: [
           BottomNavigationBarItem(
             label: 'Home',
             //backgroundColor: Theme.of(context).primaryColor,
             icon: selectedPageIndex == 0
                 ? Icon(
-                    Icons.home,
+                    Icons.home_rounded,
                   )
                 : Icon(
                     Icons.home_outlined,
                   ),
           ),
           BottomNavigationBarItem(
-            label: 'Chats',
-            icon: selectedPageIndex == 1
-                ? Icon(
-                    Icons.chat_bubble,
-                  )
-                : Icon(
-                    Icons.chat_bubble_outline,
-                  ),
-          ),
-          BottomNavigationBarItem(
             label: 'My Ads',
-            icon: selectedPageIndex == 2
+            icon: selectedPageIndex == 1
                 ? Icon(
                     Icons.book,
                   )
@@ -91,8 +89,28 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
                   ),
           ),
           BottomNavigationBarItem(
-            label: 'Profile',
+            label: 'Add',
+            icon: selectedPageIndex == 2
+                ? Icon(
+                    Icons.add_circle,
+                  )
+                : Icon(
+                    Icons.add_circle_outline,
+                  ),
+          ),
+          BottomNavigationBarItem(
+            label: 'Chats',
             icon: selectedPageIndex == 3
+                ? Icon(
+                    Icons.chat_bubble,
+                  )
+                : Icon(
+                    Icons.chat_bubble_outline,
+                  ),
+          ),
+          BottomNavigationBarItem(
+            label: 'Profile',
+            icon: selectedPageIndex == 4
                 ? Icon(
                     Icons.person,
                   )

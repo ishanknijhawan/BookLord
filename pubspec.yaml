@@ -31,6 +31,11 @@ dependencies:
     firebase_auth: 0.16.1
     flutter_svg: ^0.19.1
     provider: ^4.3.2+2
+    image_picker: ^0.6.7+12
+    path_provider: ^1.6.24
+    path: ^1.7.0
+    location: ^3.0.2
+    geolocator: ^6.1.4
 
 dev_dependencies:
     flutter_test:

@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'screens/tabs/chat_screen.dart';
 import './screens/auth_screen.dart';
 import './screens/bottom_navigation.dart';
+import './screens/further_cat.dart';
 
 void main() {
   runApp(MyApp());
@@ -22,6 +23,11 @@ class MyApp extends StatelessWidget {
           backgroundColor: Colors.indigo,
           scaffoldBackgroundColor: Colors.white,
           accentColorBrightness: Brightness.dark,
+          textTheme: TextTheme(
+            headline6: TextStyle(
+              fontFamily: 'Poppins',
+            ),
+          ),
           buttonTheme: ButtonTheme.of(context).copyWith(
             buttonColor: Colors.indigo,
             textTheme: ButtonTextTheme.primary,
@@ -47,6 +53,7 @@ class MyApp extends StatelessWidget {
       ),
       routes: {
         ChatScreen.routeName: (context) => ChatScreen(),
+        FurtherCat.routeName: (context) => FurtherCat(),
       },
     );
   }
