@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
+import 'package:provider/provider.dart';
+
 import 'package:chat_app/data/categories.dart';
+import 'package:chat_app/provider/ad_provider.dart';
+import 'package:chat_app/screens/add/book_info_one.dart';
 
 class FurtherCat extends StatelessWidget {
   static const routeName = './further_cat';
@@ -21,8 +25,14 @@ class FurtherCat extends StatelessWidget {
             children: [
               ListTile(
                 onTap: () {
-                  Categories.addCategory(cats['further'][i]);
-                  print(Categories.storedCategories);
+                  //Categories.addCategory(cats['further'][i]);
+                  Provider.of<AdProvider>(
+                    context,
+                    listen: false,
+                  ).addCategory(cats['further'][i]);
+                  Navigator.of(context).pushNamed(
+                    BookInfoOne.routeName,
+                  );
                 },
                 title: Text(
                   cats['further'][i],

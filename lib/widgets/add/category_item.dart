@@ -1,7 +1,10 @@
-import 'package:chat_app/screens/further_cat.dart';
+import 'package:chat_app/provider/ad_provider.dart';
 import 'package:flutter/material.dart';
 
+import 'package:provider/provider.dart';
+
 import 'package:chat_app/data/categories.dart';
+import 'package:chat_app/screens/add/further_cat.dart';
 
 class CategoryItem extends StatelessWidget {
   final int index;
@@ -24,7 +27,11 @@ class CategoryItem extends StatelessWidget {
             .then((_) {
           Categories.storedCategories.clear();
         });
-        Categories.addCategory(cats['category']);
+        //Categories.addCategory(cats['category']);
+        Provider.of<AdProvider>(
+          context,
+          listen: false,
+        ).addCategory(cats['category']);
       },
       splashColor: Theme.of(context).primaryColor,
       borderRadius: BorderRadius.circular(15),

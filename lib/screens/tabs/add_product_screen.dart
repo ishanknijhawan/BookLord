@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:chat_app/widgets/categories/category_item.dart';
+import 'package:chat_app/widgets/add/category_item.dart';
 import 'package:chat_app/data/categories.dart';
 
 class AddProduct extends StatelessWidget {

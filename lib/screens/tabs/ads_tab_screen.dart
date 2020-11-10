@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../my_ads_screen.dart';
-import '../favorite_ads_screen.dart';
+import '../favs/my_ads_screen.dart';
+import '../favs/favorite_ads_screen.dart';
 
 class AdsTabScreen extends StatefulWidget {
   @override

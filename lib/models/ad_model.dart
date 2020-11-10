@@ -1,23 +1,27 @@
-import 'package:flutter/cupertino.dart';
-
 import '../models/ad_location.dart';
 
 class AdModel {
-  final String id;
-  final double price;
-  final String title;
-  final List<String> categories;
-  final List<String> images;
-  final String userId;
-  final Location location;
+  String id;
+  double price;
+  String title;
+  String description;
+  List<String> categories;
+  List<String> images;
+  String userId;
+  Location location;
+  String condition;
+  bool isSold;
 
   AdModel({
     this.id,
     this.price,
     this.title,
     this.categories,
+    this.description,
     this.images,
     this.userId,
     this.location,
+    this.condition,
+    this.isSold,
   });
 }
