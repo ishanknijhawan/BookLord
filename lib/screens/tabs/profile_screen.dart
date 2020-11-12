@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart' as pPath;
+import 'package:google_sign_in/google_sign_in.dart';
 
 import 'package:chat_app/provider/ad_provider.dart';
 
@@ -17,11 +18,16 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   BuildContext ctx;
   bool isLoading = false;
   File _storedImage;
   File _pickedImage;
+
+  void _signOut() async {
+    await GoogleSignIn().signOut();
+    await FirebaseAuth.instance.signOut();
+  }
+
   void _pickImage(BuildContext context, ImageSource src) async {
     final picker = ImagePicker();
     final pickedImageFile = await picker.getImage(
@@ -211,7 +217,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           icon: Icon(
                             Icons.logout,
                           ),
-                          onPressed: () => FirebaseAuth.instance.signOut(),
+                          onPressed: _signOut,
                           label: Text('Logout'),
                         )
                       ],
