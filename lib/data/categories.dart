@@ -62,8 +62,9 @@ class Categories {
     {
       'category': 'Others',
       'further': [
-        'test',
-        'test',
+        'Religious',
+        'Spiritual',
+        'Kids',
       ],
     },
   ];

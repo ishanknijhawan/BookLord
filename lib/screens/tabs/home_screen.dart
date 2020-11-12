@@ -50,14 +50,9 @@ class _HomeScreenState extends State<HomeScreen> {
           child: GridView.builder(
             itemCount: documents.length,
             itemBuilder: (context, i) {
-              print('lalla');
-              print(documents[i]['uid']);
-              print(uid);
               return documents[i]['uid'] == uid
                   ? null
-                  : AdItem(
-                      documents[i],
-                    );
+                  : AdItem(documents[i], documents[i]['uid'] == uid);
             },
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               childAspectRatio: 3 / 2,

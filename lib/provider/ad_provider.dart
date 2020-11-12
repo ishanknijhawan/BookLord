@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'dart:io';
 
@@ -64,54 +66,102 @@ class AdProvider with ChangeNotifier {
     _adModel.location = location;
   }
 
+  Future<void> uploadProfilePicture(File imgFile) async {
+    print('coming here 1');
+    var userId = await FirebaseAuth.instance.currentUser();
+    var emailForImage = userId.email;
+    var uid = userId.uid;
+    print('uid is $uid');
+    if (imgFile != null) {
+      print('coming here as well');
+      final ref = FirebaseStorage.instance
+          .ref()
+          .child(emailForImage)
+          .child('ProfilePicture')
+          .child(DateTime.now().millisecondsSinceEpoch.toString() + '.jpg');
+      await ref.putFile(imgFile).onComplete;
+      final url = await ref.getDownloadURL();
+      print('url is $url');
+
+      await Firestore.instance
+          .collection('users')
+          .document(
+            uid,
+          )
+          .updateData({'profilePicture': url});
+    } else {
+      await Firestore.instance
+          .collection('users')
+          .document(
+            uid,
+          )
+          .updateData({'profilePicture': ''});
+    }
+  }
+
   Future<void> pushToFirebase() async {
     var userId = await FirebaseAuth.instance.currentUser();
     var emailForImage = userId.email;
     var uid = userId.uid;
-    var id = DateTime.now().toString();
+    final createdAt = Timestamp.now();
+    final imageChildPath = DateTime.now().toIso8601String();
+    final id = DateTime.now().millisecondsSinceEpoch;
+    List<String> downloadedPaths = [];
     print('email is $emailForImage');
     if (_adModel == null) {
       print('coming here null');
       _adModel = AdModel();
     }
     if (_adModel.imageAssets == null) {
-      List<String> downloadedPaths = [];
+      print('coming here 1');
       for (int i = 0; i < _adModel.images.length; i++) {
         final ref = FirebaseStorage.instance
             .ref()
             .child(emailForImage)
-            .child(id + '.jpg');
+            .child(imageChildPath)
+            .child(DateTime.now().millisecondsSinceEpoch.toString() + '.jpg');
         await ref.putFile(_adModel.images[i]).onComplete;
         final url = await ref.getDownloadURL();
-        print('url is $url');
         downloadedPaths.add(url);
       }
-      await Firestore.instance
-          .collection('products')
-          .document(
-            id,
-          )
-          .setData({
-        'id': id,
-        'createdAt': Timestamp.now(),
-        'price': _adModel.price,
-        'title': _adModel.title,
-        'author': _adModel.author,
-        'description': _adModel.description,
-        'categories': _adModel.categories,
-        'images': downloadedPaths,
-        'uid': uid,
-        'location': {
-          'latitude': _adModel.location.latitude,
-          'longitude': _adModel.location.longitude,
-          'address': _adModel.location.address,
-        },
-        'condition': _adModel.condition,
-        'isSold': _adModel.isSold,
-        'isFav': _adModel.isFav,
-      });
     } else if (_adModel.images == null) {
-      _adModel.images = [];
+      print('coming here 2');
+      for (int i = 0; i < _adModel.imageAssets.length; i++) {
+        ByteData byteData = await _adModel.imageAssets[i].getByteData();
+        List<int> imageData = byteData.buffer.asUint8List();
+        final ref = FirebaseStorage.instance
+            .ref()
+            .child(emailForImage)
+            .child(imageChildPath)
+            .child(DateTime.now().millisecondsSinceEpoch.toString() + '.jpg');
+        StorageUploadTask uploadTask = ref.putData(imageData);
+        final url = await (await uploadTask.onComplete).ref.getDownloadURL();
+        downloadedPaths.add(url);
+      }
     }
+    await Firestore.instance
+        .collection('products')
+        .document(
+          id.toString(),
+        )
+        .setData({
+      'id': id,
+      'createdAt': createdAt,
+      'price': _adModel.price,
+      'title': _adModel.title,
+      'author': _adModel.author,
+      'description': _adModel.description,
+      'categories': _adModel.categories,
+      'images': downloadedPaths,
+      'uid': uid,
+      'location': {
+        'latitude': _adModel.location.latitude,
+        'longitude': _adModel.location.longitude,
+        'address': _adModel.location.address,
+      },
+      'condition': _adModel.condition,
+      'isSold': _adModel.isSold,
+      'isFav': _adModel.isFav,
+    });
   }
 }

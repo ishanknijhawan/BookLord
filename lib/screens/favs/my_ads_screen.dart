@@ -51,6 +51,7 @@ class _MyAdsState extends State<MyAds> {
                   ? null
                   : AdItem(
                       documents[i],
+                      documents[i]['uid'] == uid,
                     );
             },
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

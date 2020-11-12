@@ -56,7 +56,8 @@ class _PriceAndLocationScreenState extends State<PriceAndLocationScreen> {
     setState(() {
       isLoading = false;
     });
-    Navigator.of(context).pushNamed(BottomNavigationScreen.routeName);
+    Navigator.of(context)
+        .pushReplacementNamed(BottomNavigationScreen.routeName);
   }
 
   @override
@@ -79,6 +80,9 @@ class _PriceAndLocationScreenState extends State<PriceAndLocationScreen> {
                     children: [
                       CircularProgressIndicator(
                         backgroundColor: Theme.of(context).primaryColor,
+                      ),
+                      SizedBox(
+                        height: 10,
                       ),
                       Text(
                         'Sit back and relax, while we post your ad!',

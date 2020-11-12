@@ -12,13 +12,12 @@ class FavoriteAdsScreen extends StatefulWidget {
 }
 
 class _FavoriteAdsScreenState extends State<FavoriteAdsScreen> {
-  FirebaseUser _user;
-  @override
-  void initState() {
-    Future.delayed(Duration.zero).then((_) async {
-      _user = await fauth.FirebaseAuth.instance.currentUser();
-    });
-    super.initState();
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  String uid;
+
+  void inputData() async {
+    final FirebaseUser user = await auth.currentUser();
+    uid = user.uid;
   }
 
   @override
@@ -47,9 +46,12 @@ class _FavoriteAdsScreenState extends State<FavoriteAdsScreen> {
           child: GridView.builder(
             itemCount: documents.length,
             itemBuilder: (context, i) {
-              return AdItem(
-                documents[i],
-              );
+              return documents[i]['uid'] == uid
+                  ? null
+                  : AdItem(
+                      documents[i],
+                      documents[i]['uid'] == uid,
+                    );
             },
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               childAspectRatio: 3 / 2,

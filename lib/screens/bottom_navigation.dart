@@ -4,7 +4,7 @@ import './tabs/home_screen.dart';
 import './tabs/chat_screen.dart';
 import './tabs/profile_screen.dart';
 import 'tabs/ads_tab_screen.dart';
-import './tabs/add_product_screen.dart';
+import 'tabs/add_product_screen.dart';
 
 class BottomNavigationScreen extends StatefulWidget {
   static const routeName = './bottom_navigation';

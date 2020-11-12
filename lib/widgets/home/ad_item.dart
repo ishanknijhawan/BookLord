@@ -4,8 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AdItem extends StatefulWidget {
   final dynamic documents;
+  final bool isMe;
   AdItem(
     this.documents,
+    this.isMe,
   );
   @override
   _AdItemState createState() => _AdItemState();
@@ -21,46 +23,48 @@ class _AdItemState extends State<AdItem> {
           widget.documents['images'][0],
           fit: BoxFit.cover,
         ),
-        header: Container(
-          padding: EdgeInsets.fromLTRB(0, 6, 2, 0),
-          alignment: Alignment.centerRight,
-          child: Container(
-            height: 40,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey[900],
-                  blurRadius: 15.0, // soften the shadow
-                  spreadRadius: 2.0, //extend the shadow
-                  offset: Offset(
-                    5.0, // Move to right 10  horizontally
-                    5.0, // Move to bottom 5 Vertically
+        header: !widget.isMe
+            ? Container(
+                padding: EdgeInsets.fromLTRB(0, 6, 2, 0),
+                alignment: Alignment.centerRight,
+                child: Container(
+                  height: 40,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey[900],
+                        blurRadius: 15.0, // soften the shadow
+                        spreadRadius: 2.0, //extend the shadow
+                        offset: Offset(
+                          5.0, // Move to right 10  horizontally
+                          5.0, // Move to bottom 5 Vertically
+                        ),
+                      )
+                    ],
                   ),
-                )
-              ],
-            ),
-            child: IconButton(
-              onPressed: () {
-                Firestore.instance
-                    .collection('products')
-                    .document(widget.documents['id'].toString())
-                    .updateData({'isFav': !widget.documents['isFav']});
-              },
-              alignment: Alignment.center,
-              icon: widget.documents['isFav']
-                  ? Icon(
-                      Icons.favorite,
-                      color: Colors.red[700],
-                    )
-                  : Icon(
-                      Icons.favorite_border,
-                      color: Colors.red[700],
-                    ),
-            ),
-          ),
-        ),
+                  child: IconButton(
+                    onPressed: () {
+                      Firestore.instance
+                          .collection('products')
+                          .document(widget.documents['id'].toString())
+                          .updateData({'isFav': !widget.documents['isFav']});
+                    },
+                    alignment: Alignment.center,
+                    icon: widget.documents['isFav']
+                        ? Icon(
+                            Icons.favorite,
+                            color: Colors.red[700],
+                          )
+                        : Icon(
+                            Icons.favorite_border,
+                            color: Colors.red[700],
+                          ),
+                  ),
+                ),
+              )
+            : null,
         footer: GridTileBar(
           backgroundColor: Colors.black.withOpacity(0.54),
           title: Column(

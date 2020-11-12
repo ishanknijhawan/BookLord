@@ -144,21 +144,37 @@ class _AddingImagesScreenState extends State<AddingImagesScreen> {
                             right: 0,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: pathList.map((url) {
-                                int index = pathList.indexOf(url);
-                                return Container(
-                                  width: 8.0,
-                                  height: 8.0,
-                                  margin: EdgeInsets.symmetric(
-                                      vertical: 10.0, horizontal: 2.0),
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: current == index
-                                        ? Colors.white
-                                        : Colors.grey,
-                                  ),
-                                );
-                              }).toList(),
+                              children: isCamera
+                                  ? pathList.map((url) {
+                                      int index = pathList.indexOf(url);
+                                      return Container(
+                                        width: 8.0,
+                                        height: 8.0,
+                                        margin: EdgeInsets.symmetric(
+                                            vertical: 10.0, horizontal: 2.0),
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: current == index
+                                              ? Colors.white
+                                              : Colors.grey,
+                                        ),
+                                      );
+                                    }).toList()
+                                  : images.map((url) {
+                                      int index = images.indexOf(url);
+                                      return Container(
+                                        width: 8.0,
+                                        height: 8.0,
+                                        margin: EdgeInsets.symmetric(
+                                            vertical: 10.0, horizontal: 2.0),
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: current == index
+                                              ? Colors.white
+                                              : Colors.grey,
+                                        ),
+                                      );
+                                    }).toList(),
                             ),
                           )
                         ]),
