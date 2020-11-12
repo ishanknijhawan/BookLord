@@ -39,6 +39,7 @@ dependencies:
     multi_image_picker: ^4.7.14
     firebase_storage: ^3.1.5
     carousel_slider: ^2.3.1
+    geocoder: ^0.2.1
 
 dev_dependencies:
     flutter_test:

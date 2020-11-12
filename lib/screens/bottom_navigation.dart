@@ -7,6 +7,7 @@ import 'tabs/ads_tab_screen.dart';
 import './tabs/add_product_screen.dart';
 
 class BottomNavigationScreen extends StatefulWidget {
+  static const routeName = './bottom_navigation';
   @override
   _BottomNavigationScreenState createState() => _BottomNavigationScreenState();
 }

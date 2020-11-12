@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
+import 'dart:math' as math;
 
 import 'package:image_picker/image_picker.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart' as pPath;
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:provider/provider.dart';
+
+import 'package:chat_app/provider/ad_provider.dart';
+import 'package:chat_app/widgets/bottom_button.dart';
+import 'package:chat_app/screens/add/price_and_location_screen.dart';
 
 class AddingImagesScreen extends StatefulWidget {
   static const routeName = './adding_images_screen';
@@ -59,6 +65,7 @@ class _AddingImagesScreenState extends State<AddingImagesScreen> {
     final imageUri = await picker.getImage(
       source: ImageSource.camera,
       maxWidth: 600,
+      imageQuality: 70,
     );
     if (imageUri == null) {
       return;
@@ -74,6 +81,15 @@ class _AddingImagesScreenState extends State<AddingImagesScreen> {
     final fileName = path.basename(_storedImage.path);
     final savedImage = await _storedImage.copy('${appDir.path}/$fileName');
     _pickedImage = savedImage;
+  }
+
+  void submitImage() {
+    if (isCamera) {
+      Provider.of<AdProvider>(context, listen: false).addImagePaths(pathList);
+    } else {
+      Provider.of<AdProvider>(context, listen: false).addImageAssets(images);
+    }
+    Navigator.of(context).pushNamed(PriceAndLocationScreen.routeName);
   }
 
   @override
@@ -239,35 +255,62 @@ class _AddingImagesScreenState extends State<AddingImagesScreen> {
                           )),
                     ],
                   ),
-                )
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Padding(
+                  padding: EdgeInsets.all(10),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: Transform.rotate(
+                          angle: math.pi / 12,
+                          child: Icon(
+                            Icons.lightbulb_outline,
+                            color: Colors.amber,
+                            size: 35,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 5,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Tip!',
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              'Try to upload pictures of any page or table of contents for better chances of selling!',
+                              textAlign: TextAlign.start,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontFamily: 'Poppins',
+                              ),
+                              maxLines: 4,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
-          RaisedButton(
-            child: Padding(
-              padding: EdgeInsets.all(10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Next',
-                    style: TextStyle(fontSize: 17, fontFamily: 'Poppins'),
-                  ),
-                  SizedBox(
-                    width: 15,
-                  ),
-                  Icon(Icons.arrow_forward),
-                ],
-              ),
-            ),
-            onPressed: () {},
-            elevation: 0,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.zero,
-            ),
-            color: Theme.of(context).primaryColor,
-            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          )
+          BottomButton(
+            'Next',
+            submitImage,
+            Icons.arrow_forward,
+          ),
         ],
       ),
     );

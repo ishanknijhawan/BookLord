@@ -10,6 +10,7 @@ import 'screens/add/further_cat.dart';
 import 'screens/add/book_info_one.dart';
 import 'provider/ad_provider.dart';
 import 'screens/add/adding_images_screen.dart';
+import 'screens/add/price_and_location_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -66,6 +67,10 @@ class MyApp extends StatelessWidget {
           FurtherCat.routeName: (context) => FurtherCat(),
           BookInfoOne.routeName: (context) => BookInfoOne(),
           AddingImagesScreen.routeName: (context) => AddingImagesScreen(),
+          PriceAndLocationScreen.routeName: (context) =>
+              PriceAndLocationScreen(),
+          BottomNavigationScreen.routeName: (context) =>
+              BottomNavigationScreen(),
         },
       ),
     );
