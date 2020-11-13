@@ -7,11 +7,13 @@ class MessageBubble extends StatelessWidget {
   final bool isMe;
   final String message;
   final DateTime time;
+  final String imageUrl;
 
   MessageBubble({
     this.isMe,
     this.message,
     this.time,
+    this.imageUrl,
   });
 
   @override
@@ -43,19 +45,28 @@ class MessageBubble extends StatelessWidget {
                     topRight: Radius.circular(10),
                     bottomRight: Radius.circular(10),
                   ),
-                  color: Theme.of(context).primaryColor,
+                  color: Theme.of(context).primaryColor.withOpacity(0.8),
                 ),
           child: Column(
             crossAxisAlignment:
                 isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
             children: [
-              Text(
-                message,
-                textAlign: TextAlign.start,
-                style: TextStyle(
-                    color: isMe ? Colors.black : Colors.white,
-                    fontFamily: 'Poppins'),
-              ),
+              imageUrl == ''
+                  ? Text(
+                      message,
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                          color: isMe ? Colors.black : Colors.white,
+                          fontFamily: 'Poppins'),
+                    )
+                  : Container(
+                      height: 150,
+                      width: 150,
+                      child: Image.network(
+                        imageUrl,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
               Text(
                 DateFormat('HH:mm').format(time),
                 style: TextStyle(

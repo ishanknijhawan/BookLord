@@ -37,6 +37,7 @@ class Messages extends StatelessWidget {
                   message: documents[i]['message'],
                   isMe: documents[i]['senderId'] == senderId,
                   time: (documents[i]['timeStamp'] as Timestamp).toDate(),
+                  imageUrl: documents[i]['imageUrl'],
                 ),
               ),
             ),

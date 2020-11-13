@@ -144,6 +144,48 @@ class AdProvider with ChangeNotifier {
     }
   }
 
+  Future<void> uploadImage(
+    File imgFile,
+    String documentId,
+    String senderId,
+    String receiverId,
+  ) async {
+    var userId = await FirebaseAuth.instance.currentUser();
+    var emailForImage = userId.email;
+    var uid = userId.uid;
+    print('uid is $uid');
+    if (imgFile != null) {
+      final ref = FirebaseStorage.instance
+          .ref()
+          .child(emailForImage)
+          .child('chat_images')
+          .child(DateTime.now().millisecondsSinceEpoch.toString() + '.jpg');
+      await ref.putFile(imgFile).onComplete;
+      final url = await ref.getDownloadURL();
+
+      await Firestore.instance
+          .collection('chats')
+          .document(
+            documentId,
+          )
+          .collection('messages')
+          .add({
+        'message': '',
+        'imageUrl': url,
+        'senderId': senderId,
+        'receiverId': receiverId,
+        'timeStamp': Timestamp.now(),
+      });
+      await Firestore.instance.collection('chats').document(documentId).setData(
+        {
+          'docId': documentId,
+          'lastMessage': 'Photo',
+          'senderId': senderId,
+        },
+      );
+    }
+  }
+
   Future<void> pushToFirebase() async {
     var userId = await FirebaseAuth.instance.currentUser();
     var emailForImage = userId.email;

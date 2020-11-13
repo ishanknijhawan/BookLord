@@ -56,7 +56,7 @@ class UsersChatScreen extends StatelessWidget {
                       getUserByReceiverId(receiverId);
                       return Container(
                         margin: EdgeInsets.symmetric(
-                          vertical: 8,
+                          vertical: 0,
                         ),
                         child: ListTile(
                           onTap: () => Navigator.of(context).pushNamed(
@@ -85,6 +85,11 @@ class UsersChatScreen extends StatelessWidget {
                           title: Text(
                             receiverName,
                             style: TextStyle(fontSize: 20),
+                          ),
+                          subtitle: Text(
+                            documents[index]['senderId'] == receiverId
+                                ? documents[index]['lastMessage']
+                                : 'You: ${documents[index]['lastMessage']}',
                           ),
                         ),
                       );
