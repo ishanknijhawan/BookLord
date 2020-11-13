@@ -7,15 +7,19 @@ import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:location/location.dart';
+import 'package:geolocator/geolocator.dart';
 
 import '../models/ad_model.dart';
 import '../data/categories.dart';
 import '../models/ad_location.dart';
+import '../models/user.dart';
 
 class AdProvider with ChangeNotifier {
   List<AdModel> _items = [];
   AdModel _adModel = AdModel();
   var cats = Categories.storedCategories;
+  var loc = AdLocation();
 
   List<AdModel> get items {
     return [..._items];
@@ -23,6 +27,47 @@ class AdProvider with ChangeNotifier {
 
   void addCategory(String cat) {
     cats.add(cat);
+  }
+
+  Future<User> getUserDataFromUid(String uid) async {
+    final userData =
+        await Firestore.instance.collection('users').document(uid).get();
+    final user = User();
+    user.email = userData['email'];
+    user.userName = userData['name'];
+    user.profilePicture = userData['profilePicture'];
+    user.uid = userData['uid'];
+
+    return user;
+  }
+
+  Future<AdLocation> getUserLocation() async {
+    if (loc.latitude == null) {
+      final location = Location();
+
+      final locData = await location.getLocation();
+      loc.latitude = locData.latitude;
+      loc.longitude = locData.longitude;
+      return loc;
+    } else {
+      return loc;
+    }
+  }
+
+  Future<double> getDistanceFromCoordinates(double lat, double long) async {
+    final location = Location();
+
+    final locData = await location.getLocation();
+    loc.latitude = locData.latitude;
+    loc.longitude = locData.longitude;
+
+    final distance = Geolocator.distanceBetween(
+      loc.latitude,
+      loc.longitude,
+      lat,
+      long,
+    );
+    return distance;
   }
 
   void addTitleAndStuff(
@@ -58,7 +103,7 @@ class AdProvider with ChangeNotifier {
     _adModel.imageAssets = images;
   }
 
-  void addLocation(double price, Location location) {
+  void addLocation(double price, AdLocation location) {
     if (_adModel == null) {
       _adModel = AdModel();
     }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import './tabs/home_screen.dart';
-import './tabs/chat_screen.dart';
+import 'tabs/users_chat_screen.dart';
 import './tabs/profile_screen.dart';
 import 'tabs/ads_tab_screen.dart';
 import 'tabs/add_product_screen.dart';
@@ -32,7 +32,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
         'title': 'Sell a Book!',
       },
       {
-        'pages': ChatScreen(),
+        'pages': UsersChatScreen(),
         'title': 'Chats',
       },
       {

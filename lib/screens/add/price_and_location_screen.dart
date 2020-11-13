@@ -6,7 +6,7 @@ import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 
 import 'package:chat_app/provider/ad_provider.dart';
-import 'package:chat_app/models/ad_location.dart' as loc;
+import 'package:chat_app/models/ad_location.dart';
 
 class PriceAndLocationScreen extends StatefulWidget {
   static const routeName = './price_and_location_screen';
@@ -40,7 +40,7 @@ class _PriceAndLocationScreenState extends State<PriceAndLocationScreen> {
       listen: false,
     ).addLocation(
       double.parse(textController.text),
-      loc.Location(
+      AdLocation(
         latitude: latitude,
         longitude: longitude,
         address: '',

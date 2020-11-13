@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 
-import 'screens/tabs/chat_screen.dart';
+import 'screens/tabs/users_chat_screen.dart';
 import 'screens/auth/auth_screen.dart';
 import './screens/bottom_navigation.dart';
 import 'screens/add/further_cat.dart';
@@ -11,6 +11,9 @@ import 'screens/add/book_info_one.dart';
 import 'provider/ad_provider.dart';
 import 'screens/add/adding_images_screen.dart';
 import 'screens/add/price_and_location_screen.dart';
+import 'screens/home/product_detail_screen.dart';
+import 'screens/chats/chat_screen.dart';
+import 'screens/tabs/users_chat_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -63,7 +66,7 @@ class MyApp extends StatelessWidget {
           },
         ),
         routes: {
-          ChatScreen.routeName: (context) => ChatScreen(),
+          UsersChatScreen.routeName: (context) => UsersChatScreen(),
           FurtherCat.routeName: (context) => FurtherCat(),
           BookInfoOne.routeName: (context) => BookInfoOne(),
           AddingImagesScreen.routeName: (context) => AddingImagesScreen(),
@@ -71,6 +74,8 @@ class MyApp extends StatelessWidget {
               PriceAndLocationScreen(),
           BottomNavigationScreen.routeName: (context) =>
               BottomNavigationScreen(),
+          ProductDetailScreen.routeName: (context) => ProductDetailScreen(),
+          ChatScreen.routeName: (context) => ChatScreen(),
         },
       ),
     );

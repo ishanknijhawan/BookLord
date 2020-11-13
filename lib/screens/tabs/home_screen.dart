@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as fauth;
+import 'package:provider/provider.dart';
 
 import 'package:chat_app/widgets/home/ad_item.dart';
+import 'package:chat_app/provider/ad_provider.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -32,6 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
           .snapshots(),
       builder: (context, snapshot) {
         inputData();
+        Provider.of<AdProvider>(context, listen: false).getUserLocation();
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(
             child: CircularProgressIndicator(

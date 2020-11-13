@@ -14,7 +14,7 @@ class AdModel {
   List<File> images;
   List<Asset> imageAssets;
   String userId;
-  Location location;
+  AdLocation location;
   String condition;
   bool isSold;
   bool isFav;

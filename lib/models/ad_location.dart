@@ -1,7 +1,11 @@
-class Location {
-  final double latitude;
-  final double longitude;
-  final String address;
+class AdLocation {
+  double latitude;
+  double longitude;
+  String address;
 
-  Location({this.latitude, this.longitude, this.address});
+  AdLocation({
+    this.latitude,
+    this.longitude,
+    this.address,
+  });
 }
