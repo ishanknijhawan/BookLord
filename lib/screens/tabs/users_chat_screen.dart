@@ -1,7 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 
 import 'package:chat_app/screens/chats/chat_screen.dart';
 import 'package:chat_app/models/user.dart';
@@ -91,6 +93,15 @@ class UsersChatScreen extends StatelessWidget {
                             documents[index]['senderId'] == receiverId
                                 ? documents[index]['lastMessage']
                                 : 'You: ${documents[index]['lastMessage']}',
+                          ),
+                          trailing: Text(
+                            DateFormat('HH:mm').format(
+                              (documents[index]['timeStamp'] as Timestamp)
+                                  .toDate(),
+                            ),
+                            style: TextStyle(
+                              color: Colors.grey[600],
+                            ),
                           ),
                         ),
                       );

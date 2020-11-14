@@ -86,11 +86,16 @@ class _AdItemState extends State<AdItem> {
                   style: TextStyle(fontFamily: 'Poppins'),
                 ),
                 Text(
-                  '₹${widget.documents['price'].toString()}',
+                  widget.documents['price'] == 0
+                      ? 'Donate'
+                      : '₹${widget.documents['price'].toString()}',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
+                    color: widget.documents['price'] == 0
+                        ? Colors.pink[200]
+                        : Colors.white,
                   ),
                 ),
               ],

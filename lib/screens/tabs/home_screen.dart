@@ -14,58 +14,63 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final FirebaseAuth auth = FirebaseAuth.instance;
-  String uid;
-
-  void inputData() async {
-    final FirebaseUser user = await auth.currentUser();
-    uid = user.uid;
-  }
-
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-      stream: Firestore.instance
-          .collection('products')
-          .where(
-            'isSold',
-            isEqualTo: false,
-          )
-          .snapshots(),
-      builder: (context, snapshot) {
-        inputData();
-        Provider.of<AdProvider>(context, listen: false).getUserLocation();
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(
-            child: CircularProgressIndicator(
-              backgroundColor: Theme.of(context).primaryColor,
-            ),
-          );
-        }
-        var documents = snapshot.data.documents;
-        if (snapshot.data.documents.length == 0) {
-          return Center(
-            child: Text('No ads here'),
-          );
-        }
-        return Padding(
-          padding: EdgeInsets.all(10),
-          child: GridView.builder(
-            itemCount: documents.length,
-            itemBuilder: (context, i) {
-              return documents[i]['uid'] == uid
-                  ? null
-                  : AdItem(documents[i], documents[i]['uid'] == uid);
+    return FutureBuilder(
+        future: FirebaseAuth.instance.currentUser(),
+        builder: (ctx, userData) {
+          if (userData.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(
+                backgroundColor: Theme.of(context).primaryColor,
+              ),
+            );
+          }
+          return StreamBuilder(
+            stream: Firestore.instance
+                .collection('products')
+                .where(
+                  'isSold',
+                  isEqualTo: false,
+                )
+                .snapshots(),
+            builder: (context, snapshot) {
+              Provider.of<AdProvider>(context, listen: false).getUserLocation();
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(
+                  child: CircularProgressIndicator(
+                    backgroundColor: Theme.of(context).primaryColor,
+                  ),
+                );
+              }
+              var documents = snapshot.data.documents;
+              if (snapshot.data.documents.length == 0) {
+                return Center(
+                  child: Text('No ads here'),
+                );
+              }
+              return Padding(
+                padding: EdgeInsets.all(10),
+                child: GridView.builder(
+                  itemCount: documents.length,
+                  itemBuilder: (context, i) {
+                    return documents[i]['uid'] == userData.data.uid
+                        ? null
+                        : AdItem(
+                            documents[i],
+                            documents[i]['uid'] == userData.data.uid,
+                          );
+                  },
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    childAspectRatio: 3 / 2,
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 10,
+                    crossAxisSpacing: 10,
+                  ),
+                ),
+              );
             },
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              childAspectRatio: 3 / 2,
-              crossAxisCount: 2,
-              mainAxisSpacing: 10,
-              crossAxisSpacing: 10,
-            ),
-          ),
-        );
-      },
-    );
+          );
+        });
   }
 }

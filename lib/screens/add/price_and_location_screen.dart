@@ -35,6 +35,9 @@ class _PriceAndLocationScreenState extends State<PriceAndLocationScreen> {
   }
 
   Future<void> submitLocation() async {
+    if (isDonate) {
+      textController.text = '0.0';
+    }
     Provider.of<AdProvider>(
       context,
       listen: false,
@@ -141,6 +144,8 @@ class _PriceAndLocationScreenState extends State<PriceAndLocationScreen> {
                                     size: 40,
                                   ),
                             onPressed: () {
+                              textController.clear();
+                              FocusScope.of(context).unfocus();
                               setState(() {
                                 if (isDonate) {
                                   containerHeight = 80;

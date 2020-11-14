@@ -110,7 +110,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                         decoration: BoxDecoration(
                                           shape: BoxShape.circle,
                                           color: current == index
-                                              ? Colors.white
+                                              ? Theme.of(context).accentColor
                                               : Colors.grey,
                                         ),
                                       );

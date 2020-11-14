@@ -155,7 +155,7 @@ class _AddingImagesScreenState extends State<AddingImagesScreen> {
                                         decoration: BoxDecoration(
                                           shape: BoxShape.circle,
                                           color: current == index
-                                              ? Colors.white
+                                              ? Theme.of(context).accentColor
                                               : Colors.grey,
                                         ),
                                       );
@@ -170,7 +170,7 @@ class _AddingImagesScreenState extends State<AddingImagesScreen> {
                                         decoration: BoxDecoration(
                                           shape: BoxShape.circle,
                                           color: current == index
-                                              ? Colors.white
+                                              ? Theme.of(context).accentColor
                                               : Colors.grey,
                                         ),
                                       );
@@ -267,7 +267,7 @@ class _AddingImagesScreenState extends State<AddingImagesScreen> {
                       Expanded(
                           flex: 1,
                           child: Container(
-                            color: Colors.white,
+                            color: Theme.of(context).accentColor,
                           )),
                     ],
                   ),

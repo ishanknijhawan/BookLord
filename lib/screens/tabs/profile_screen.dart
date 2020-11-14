@@ -12,6 +12,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 import 'package:chat_app/provider/ad_provider.dart';
 import 'package:chat_app/widgets/profile/image_picker_button.dart';
+import 'package:chat_app/widgets/profile/profile_switches.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -87,45 +88,48 @@ class _ProfileScreenState extends State<ProfileScreen> {
               }
 
               return Padding(
-                padding: EdgeInsets.all(32),
+                padding: EdgeInsets.all(0),
                 child: SingleChildScrollView(
                   child: Container(
                     width: double.infinity,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Stack(
-                          children: [
-                            Container(
-                              alignment: Alignment.center,
-                              height: 120,
-                              width: 120,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border:
-                                    Border.all(color: Colors.black, width: 2),
-                              ),
-                              child: snapshot.data['profilePicture'] == ''
-                                  ? SvgPicture.asset(
-                                      'assets/images/boy.svg',
-                                    )
-                                  : CircleAvatar(
-                                      radius: 60,
-                                      backgroundImage: NetworkImage(
-                                        snapshot.data['profilePicture'],
+                        Padding(
+                          padding: const EdgeInsets.all(32.0),
+                          child: Stack(
+                            children: [
+                              Container(
+                                alignment: Alignment.center,
+                                height: 120,
+                                width: 120,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border:
+                                      Border.all(color: Colors.black, width: 2),
+                                ),
+                                child: snapshot.data['profilePicture'] == ''
+                                    ? SvgPicture.asset(
+                                        'assets/images/boy.svg',
+                                      )
+                                    : CircleAvatar(
+                                        radius: 60,
+                                        backgroundImage: NetworkImage(
+                                          snapshot.data['profilePicture'],
+                                        ),
                                       ),
-                                    ),
-                            ),
-                            Positioned(
-                                right: 0,
-                                bottom: 0,
-                                child: ImagePickerButton(
-                                  isLoading: isLoading,
-                                  ctx: ctx,
-                                  pickImage: _pickImage,
-                                  profilePic: snapshot.data['profilePicture'],
-                                )),
-                          ],
+                              ),
+                              Positioned(
+                                  right: 0,
+                                  bottom: 0,
+                                  child: ImagePickerButton(
+                                    isLoading: isLoading,
+                                    ctx: ctx,
+                                    pickImage: _pickImage,
+                                    profilePic: snapshot.data['profilePicture'],
+                                  )),
+                            ],
+                          ),
                         ),
                         SizedBox(
                           height: 15,
@@ -137,6 +141,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             fontSize: 24,
                           ),
                         ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        ProfileSwitches(),
                         SizedBox(
                           height: 25,
                         ),

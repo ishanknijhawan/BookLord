@@ -66,6 +66,7 @@ class _NewMessageState extends State<NewMessage> {
 
   void _sendMessage() async {
     //FocusScope.of(context).unfocus();
+    final ts = Timestamp.now();
     messageController.clear();
     await Firestore.instance
         .collection('chats')
@@ -76,7 +77,7 @@ class _NewMessageState extends State<NewMessage> {
       'imageUrl': '',
       'senderId': widget.senderId,
       'receiverId': widget.receiverId,
-      'timeStamp': Timestamp.now(),
+      'timeStamp': ts,
     });
     await Firestore.instance
         .collection('chats')
@@ -86,6 +87,7 @@ class _NewMessageState extends State<NewMessage> {
         'docId': widget.documentId,
         'lastMessage': enteredMessage,
         'senderId': widget.senderId,
+        'timeStamp': ts,
       },
     );
   }

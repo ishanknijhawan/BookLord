@@ -105,38 +105,40 @@ class _AuthScreenState extends State<AuthScreen> {
       backgroundColor: Theme.of(context).primaryColor,
       body: Container(
         margin: EdgeInsets.fromLTRB(0, 100, 0, 0),
-        child: Column(
-          children: [
-            Transform.rotate(
-              angle: -math.pi / 18,
-              child: Container(
-                padding: EdgeInsets.all(32),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Text(
-                  'BookLord',
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    color: Theme.of(context).primaryColor,
-                    fontSize: 40,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Transform.rotate(
+                angle: -math.pi / 18,
+                child: Container(
+                  padding: EdgeInsets.all(32),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).accentColor,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Text(
+                    'BookLord',
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      color: Theme.of(context).primaryColor,
+                      fontSize: 40,
+                    ),
                   ),
                 ),
               ),
-            ),
-            SizedBox(
-              height: 40,
-            ),
-            AuthForm(
-              submitFunction,
-              isLoading,
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            SignInButton(Buttons.Google, onPressed: _signInWithGoogle),
-          ],
+              SizedBox(
+                height: 40,
+              ),
+              AuthForm(
+                submitFunction,
+                isLoading,
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              SignInButton(Buttons.Google, onPressed: _signInWithGoogle),
+            ],
+          ),
         ),
       ),
     );
