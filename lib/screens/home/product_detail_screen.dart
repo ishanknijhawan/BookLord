@@ -33,17 +33,82 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   };
   int current = 0;
   AdLocation loc;
+  BuildContext ctx;
+  var docId;
+
+  void deleteAd(BuildContext ctx) async {
+    Navigator.of(ctx).pop();
+    await Firestore.instance
+        .collection('products')
+        .document(
+          docId.toString(),
+        )
+        .delete();
+  }
 
   @override
   Widget build(BuildContext context) {
+    ctx = context;
     User userData;
-    final DocumentSnapshot documents =
-        ModalRoute.of(context).settings.arguments;
+    final args =
+        ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
+    final DocumentSnapshot documents = args['documents'];
+    docId = documents['id'];
+    final bool isMe = args['isMe'];
     final images = documents['images'] as List<dynamic>;
     Timestamp dateTime = documents['createdAt'];
     return Scaffold(
       appBar: AppBar(
-        title: Text(documents['title']),
+        title: Text(
+          documents['title'],
+        ),
+        actions: isMe
+            ? [
+                PopupMenuButton(
+                  icon: Icon(
+                    Icons.more_vert,
+                  ),
+                  itemBuilder: (_) => [
+                    PopupMenuItem(
+                      child: Text('Delete this Ad'),
+                      value: 'delete',
+                    ),
+                  ],
+                  onSelected: (value) {
+                    if (value == 'delete') {
+                      showDialog(
+                        context: ctx,
+                        builder: (context) => AlertDialog(
+                          title: Text('Delete this Ad ?'),
+                          content:
+                              Text('Are you sure you want to delete this ad ?'),
+                          actions: [
+                            FlatButton(
+                              child: Text(
+                                'NO',
+                                style: TextStyle(
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                              ),
+                              onPressed: () => Navigator.of(context).pop(),
+                            ),
+                            RaisedButton(
+                              color: Theme.of(context).primaryColor,
+                              textColor: Colors.white,
+                              child: Text('YES'),
+                              onPressed: () {
+                                deleteAd(context);
+                                Navigator.of(context).pop();
+                              },
+                            )
+                          ],
+                        ),
+                      );
+                    }
+                  },
+                ),
+              ]
+            : [],
       ),
       body: FutureBuilder(
           future: Provider.of<AdProvider>(context).getUserDataFromUid(
@@ -320,7 +385,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                         ),
                                       ),
                                       Text(
-                                        userSnapshot.data.userName,
+                                        isMe
+                                            ? 'You'
+                                            : userSnapshot.data.userName,
                                         style: TextStyle(
                                           fontSize: 18,
                                           fontFamily: 'Poppins',
@@ -358,19 +425,21 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   );
                 });
           }),
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: Theme.of(context).primaryColor,
-        foregroundColor: Colors.white,
-        elevation: 15,
-        label: Text('Chat'),
-        icon: Icon(
-          Icons.chat_bubble_outline,
-        ),
-        onPressed: () => Navigator.of(context).pushNamed(
-          ChatScreen.routeName,
-          arguments: userData,
-        ),
-      ),
+      floatingActionButton: !isMe
+          ? FloatingActionButton.extended(
+              backgroundColor: Theme.of(context).primaryColor,
+              foregroundColor: Colors.white,
+              elevation: 15,
+              label: Text('Chat'),
+              icon: Icon(
+                Icons.chat_bubble_outline,
+              ),
+              onPressed: () => Navigator.of(context).pushNamed(
+                ChatScreen.routeName,
+                arguments: userData,
+              ),
+            )
+          : null,
     );
   }
 }

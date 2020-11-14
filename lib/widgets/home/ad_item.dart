@@ -23,7 +23,10 @@ class _AdItemState extends State<AdItem> {
       child: InkWell(
         onTap: () => Navigator.of(context).pushNamed(
           ProductDetailScreen.routeName,
-          arguments: widget.documents,
+          arguments: {
+            'documents': widget.documents,
+            'isMe': widget.isMe,
+          },
         ),
         child: GridTile(
           child: Hero(

@@ -30,6 +30,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: ThemeProvider(
+        saveThemesOnChange: true,
         themes: [
           AppTheme(
             id: "light_theme", // Id(or name) of the theme(Has to be unique)
