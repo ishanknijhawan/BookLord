@@ -38,7 +38,10 @@ class _FavoriteAdsScreenState extends State<FavoriteAdsScreen> {
         var documents = snapshot.data.documents;
         if (snapshot.data.documents.length == 0) {
           return Center(
-            child: Text('No ads here'),
+            child: Text(
+              'You don\'t have any favorites',
+              style: TextStyle(fontSize: 16),
+            ),
           );
         }
         return Padding(

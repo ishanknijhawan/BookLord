@@ -29,6 +29,13 @@ class AdProvider with ChangeNotifier {
     cats.add(cat);
   }
 
+  String getLocationFromLatLang({double latitude, double longitude}) {
+    final API_KEY = 'AIzaSyCR1_gIXbLa3EOI1BB-VGfj4jo9jj1KvX4';
+    final url =
+        'https://maps.googleapis.com/maps/api/staticmap?center=$latitude,$longitude&zoom=16&size=600x300&maptype=roadmap&markers=color:blue%7Clabel:S%7C40.702147,-74.015794&markers=color:green%7Clabel:G%7C40.711614,-74.012318&markers=color:red%7Clabel:A%7C$latitude,$longitude&key=$API_KEY';
+    return url;
+  }
+
   Future<User> getUserDataFromUid(String uid) async {
     final userData =
         await Firestore.instance.collection('users').document(uid).get();
@@ -152,6 +159,7 @@ class AdProvider with ChangeNotifier {
   ) async {
     var userId = await FirebaseAuth.instance.currentUser();
     var emailForImage = userId.email;
+    final ts = Timestamp.now();
     var uid = userId.uid;
     print('uid is $uid');
     if (imgFile != null) {
@@ -174,13 +182,14 @@ class AdProvider with ChangeNotifier {
         'imageUrl': url,
         'senderId': senderId,
         'receiverId': receiverId,
-        'timeStamp': Timestamp.now(),
+        'timeStamp': ts,
       });
       await Firestore.instance.collection('chats').document(documentId).setData(
         {
           'docId': documentId,
           'lastMessage': 'Photo',
           'senderId': senderId,
+          'timeStamp': ts,
         },
       );
     }

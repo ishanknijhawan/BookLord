@@ -54,12 +54,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: GridView.builder(
                   itemCount: documents.length,
                   itemBuilder: (context, i) {
-                    return documents[i]['uid'] == userData.data.uid
-                        ? null
-                        : AdItem(
-                            documents[i],
-                            documents[i]['uid'] == userData.data.uid,
-                          );
+                    print('coming here xxx');
+                    print('user uid is ${userData.data.uid}');
+                    print('document uid is ${documents[i]['uid']}');
+                    return AdItem(
+                      documents[i],
+                      documents[i]['uid'] == userData.data.uid,
+                    );
                   },
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     childAspectRatio: 3 / 2,

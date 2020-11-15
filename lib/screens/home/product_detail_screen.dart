@@ -17,6 +17,7 @@ class ProductDetailScreen extends StatefulWidget {
 }
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
+  String mapUrl = '';
   final Map<int, String> cal = {
     1: 'Jan',
     2: 'Fab',
@@ -35,6 +36,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   AdLocation loc;
   BuildContext ctx;
   var docId;
+  bool isSold = false;
 
   void deleteAd(BuildContext ctx) async {
     Navigator.of(ctx).pop();
@@ -46,6 +48,19 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         .delete();
   }
 
+  void markAsSold(BuildContext ctx) async {
+    Navigator.of(ctx).pop();
+    await Firestore.instance
+        .collection('products')
+        .document(
+          docId.toString(),
+        )
+        .updateData({'isSold': true});
+    setState(() {
+      isSold = true;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     ctx = context;
@@ -55,8 +70,16 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     final DocumentSnapshot documents = args['documents'];
     docId = documents['id'];
     final bool isMe = args['isMe'];
+    isSold = documents['isSold'];
     final images = documents['images'] as List<dynamic>;
     Timestamp dateTime = documents['createdAt'];
+
+    mapUrl =
+        Provider.of<AdProvider>(context, listen: false).getLocationFromLatLang(
+      latitude: (documents['location']['latitude'] as double),
+      longitude: (documents['location']['longitude'] as double),
+    );
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -73,6 +96,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       child: Text('Delete this Ad'),
                       value: 'delete',
                     ),
+                    PopupMenuItem(
+                      child: Text('Mark as sold'),
+                      value: 'sell',
+                    )
                   ],
                   onSelected: (value) {
                     if (value == 'delete') {
@@ -99,6 +126,34 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               onPressed: () {
                                 deleteAd(context);
                                 Navigator.of(context).pop();
+                              },
+                            )
+                          ],
+                        ),
+                      );
+                    } else if (value == 'sell') {
+                      showDialog(
+                        context: ctx,
+                        builder: (context) => AlertDialog(
+                          title: Text('Mark as Sold ?'),
+                          content: Text(
+                              'Your ad won\'t be visible to the users anymore ?'),
+                          actions: [
+                            FlatButton(
+                              child: Text(
+                                'NO',
+                                style: TextStyle(
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                              ),
+                              onPressed: () => Navigator.of(context).pop(),
+                            ),
+                            RaisedButton(
+                              color: Theme.of(context).primaryColor,
+                              textColor: Colors.white,
+                              child: Text('YES'),
+                              onPressed: () {
+                                markAsSold(context);
                               },
                             )
                           ],
@@ -202,7 +257,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 16),
                             child: Text(
-                              '₹${documents['price']}',
+                              isSold ? 'Sold' : '₹${documents['price']}',
                               style: TextStyle(
                                 fontSize: 22,
                                 fontWeight: FontWeight.bold,
@@ -412,7 +467,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 ),
                               ),
                               child: Center(
-                                child: Text('No location'),
+                                child: mapUrl.isEmpty
+                                    ? Text('No location')
+                                    : Image.network(
+                                        mapUrl,
+                                        fit: BoxFit.cover,
+                                      ),
                               ),
                             ),
                           ),

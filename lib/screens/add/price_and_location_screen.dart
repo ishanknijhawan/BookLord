@@ -22,6 +22,48 @@ class _PriceAndLocationScreenState extends State<PriceAndLocationScreen> {
   var containerHeight = 80.0;
   var textController = TextEditingController();
   var isLoading = false;
+  String mapUrl = '';
+  BuildContext ctx;
+
+  void checkInputs(BuildContext ctx) {
+    if ((textController.text.trim() == '0') ||
+        (!isDonate && textController.text.isEmpty)) {
+      showDialog(
+        context: ctx,
+        builder: (context) => AlertDialog(
+          title: Text('Invalid Price'),
+          content: Text('Please enter a valid price'),
+          actions: [
+            RaisedButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+        ),
+      );
+    } else if (mapUrl.isEmpty) {
+      showDialog(
+        context: ctx,
+        builder: (context) => AlertDialog(
+          title: Text('Invalid input'),
+          content: Text('Please provide your location to proceed further'),
+          actions: [
+            RaisedButton(
+              child: Text('Provide Location'),
+              onPressed: () {
+                getUserLocation();
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+        ),
+      );
+    } else {
+      submitLocation();
+    }
+  }
 
   Future<void> getUserLocation() async {
     final location = Location();
@@ -31,6 +73,12 @@ class _PriceAndLocationScreenState extends State<PriceAndLocationScreen> {
     longitude = locData.longitude;
     setState(() {
       currLocation = '$latitude,$longitude';
+      mapUrl = Provider.of<AdProvider>(context, listen: false)
+          .getLocationFromLatLang(
+        latitude: latitude,
+        longitude: longitude,
+      );
+      print('mapUrl is $mapUrl');
     });
   }
 
@@ -65,6 +113,7 @@ class _PriceAndLocationScreenState extends State<PriceAndLocationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ctx = context;
     final PreferredSizeWidget appBar = AppBar(
       title: Text('Enter the price'),
     );
@@ -167,7 +216,12 @@ class _PriceAndLocationScreenState extends State<PriceAndLocationScreen> {
                               borderRadius: BorderRadius.circular(5),
                             ),
                             child: Center(
-                              child: Text('No location selected'),
+                              child: mapUrl.isEmpty
+                                  ? Text('No location selected')
+                                  : Image.network(
+                                      mapUrl,
+                                      fit: BoxFit.cover,
+                                    ),
                             ),
                           ),
                           SizedBox(
@@ -187,7 +241,7 @@ class _PriceAndLocationScreenState extends State<PriceAndLocationScreen> {
                       alignment: Alignment.bottomCenter,
                       child: BottomButton(
                         'Post',
-                        submitLocation,
+                        () => checkInputs(ctx),
                         Icons.post_add_outlined,
                       ),
                     ),
