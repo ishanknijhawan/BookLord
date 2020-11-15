@@ -22,6 +22,7 @@ class AddingImagesScreen extends StatefulWidget {
 class _AddingImagesScreenState extends State<AddingImagesScreen> {
   File _storedImage;
   File _pickedImage;
+  BuildContext ctx;
   int current = 0;
   List<File> pathList = [];
   bool isCamera = true;
@@ -84,7 +85,27 @@ class _AddingImagesScreenState extends State<AddingImagesScreen> {
   }
 
   void submitImage() {
-    if (isCamera) {
+    if (listt.isEmpty) {
+      showDialog(
+        context: ctx,
+        child: AlertDialog(
+          title: Text('No images added'),
+          content: Text('Please add atleast 1 image'),
+          actions: [
+            FlatButton(
+              onPressed: () => Navigator.of(ctx).pop(),
+              child: Text(
+                'Got it!',
+                style: TextStyle(
+                  color: Theme.of(ctx).primaryColor,
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+      return;
+    } else if (isCamera) {
       Provider.of<AdProvider>(context, listen: false).addImagePaths(pathList);
     } else {
       Provider.of<AdProvider>(context, listen: false).addImageAssets(images);
@@ -94,7 +115,7 @@ class _AddingImagesScreenState extends State<AddingImagesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    BuildContext ctx = context;
+    ctx = context;
     return Scaffold(
       appBar: AppBar(
         title: Text('Add some images'),
