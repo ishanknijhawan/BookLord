@@ -12,14 +12,6 @@ class MyAds extends StatefulWidget {
 }
 
 class _MyAdsState extends State<MyAds> {
-  // final FirebaseAuth auth = FirebaseAuth.instance;
-  // String uid;
-
-  // void inputData() async {
-  //   final FirebaseUser user = await auth.currentUser();
-  //   uid = user.uid;
-  // }
-
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -59,6 +51,7 @@ class _MyAdsState extends State<MyAds> {
                     return AdItem(
                       documents[i],
                       documents[i]['uid'] == userData.data.uid,
+                      userData.data.uid,
                     );
                   },
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

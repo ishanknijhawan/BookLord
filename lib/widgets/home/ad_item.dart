@@ -7,9 +7,11 @@ import 'package:chat_app/screens/home/product_detail_screen.dart';
 class AdItem extends StatefulWidget {
   final dynamic documents;
   final bool isMe;
+  final String myId;
   AdItem(
     this.documents,
     this.isMe,
+    this.myId,
   );
   @override
   _AdItemState createState() => _AdItemState();

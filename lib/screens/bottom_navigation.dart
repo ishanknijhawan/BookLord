@@ -6,6 +6,8 @@ import './tabs/profile_screen.dart';
 import 'tabs/ads_tab_screen.dart';
 import 'tabs/add_product_screen.dart';
 
+import 'package:chat_app/screens/home/search.dart';
+
 class BottomNavigationScreen extends StatefulWidget {
   static const routeName = './bottom_navigation';
   @override
@@ -55,6 +57,16 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
                   fontFamily: 'Poppins',
                 ),
               ),
+              actions: selectedPageIndex == 0
+                  ? [
+                      IconButton(
+                        icon: Icon(Icons.search),
+                        onPressed: () {
+                          showSearch(context: context, delegate: Search());
+                        },
+                      )
+                    ]
+                  : [],
             ),
       body: _pages[selectedPageIndex]['pages'],
       bottomNavigationBar: BottomNavigationBar(

@@ -17,16 +17,16 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: FirebaseAuth.instance.currentUser(),
-        builder: (ctx, userData) {
-          if (userData.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: CircularProgressIndicator(
-                backgroundColor: Theme.of(context).primaryColor,
-              ),
-            );
-          }
-          return StreamBuilder(
+      future: FirebaseAuth.instance.currentUser(),
+      builder: (ctx, userData) {
+        if (userData.connectionState == ConnectionState.waiting) {
+          return Center(
+            child: CircularProgressIndicator(
+              backgroundColor: Theme.of(context).primaryColor,
+            ),
+          );
+        }
+        return StreamBuilder(
             stream: Firestore.instance
                 .collection('products')
                 .where(
@@ -49,17 +49,16 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Text('No ads here'),
                 );
               }
+
               return Padding(
                 padding: EdgeInsets.all(10),
                 child: GridView.builder(
                   itemCount: documents.length,
                   itemBuilder: (context, i) {
-                    print('coming here xxx');
-                    print('user uid is ${userData.data.uid}');
-                    print('document uid is ${documents[i]['uid']}');
                     return AdItem(
                       documents[i],
                       documents[i]['uid'] == userData.data.uid,
+                      userData.data.uid,
                     );
                   },
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -70,8 +69,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               );
-            },
-          );
-        });
+            });
+      },
+    );
   }
 }
