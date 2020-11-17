@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
 import 'package:intl/intl.dart';
+import 'package:theme_provider/theme_provider.dart';
 
 class MessageBubble extends StatelessWidget {
   final bool isMe;
@@ -36,7 +37,7 @@ class MessageBubble extends StatelessWidget {
                     topRight: Radius.circular(10),
                     bottomRight: Radius.zero,
                   ),
-                  color: Colors.grey[200],
+                  color: Theme.of(context).cardColor,
                 )
               : BoxDecoration(
                   borderRadius: BorderRadius.only(
@@ -55,9 +56,9 @@ class MessageBubble extends StatelessWidget {
                   ? Text(
                       message,
                       textAlign: TextAlign.start,
-                      style: TextStyle(
-                          color: isMe ? Colors.black : Colors.white,
-                          fontFamily: 'Poppins'),
+                      style: isMe
+                          ? Theme.of(context).textTheme.subtitle2
+                          : Theme.of(context).textTheme.subtitle1,
                     )
                   : Container(
                       height: 150,

@@ -74,10 +74,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
         iconSize: 28,
         currentIndex: selectedPageIndex,
         type: BottomNavigationBarType.fixed,
-        backgroundColor: Theme.of(context).accentColor,
-        selectedItemColor: Theme.of(context).primaryColor,
-        unselectedItemColor: Theme.of(context).primaryColor,
-        showSelectedLabels: false,
+        showSelectedLabels: true,
         showUnselectedLabels: false,
         items: [
           BottomNavigationBarItem(

@@ -35,18 +35,20 @@ class MyApp extends StatelessWidget {
           AppTheme(
             id: "light_theme", // Id(or name) of the theme(Has to be unique)
             description: 'ThemeLight',
+
             data: ThemeData(
               fontFamily: 'Roboto',
               primarySwatch: Colors.indigo,
-              accentColor: Colors.white,
+              accentColor: Colors.indigo,
+              cardColor: Colors.grey[200],
               backgroundColor: Colors.indigo,
+              bottomNavigationBarTheme: BottomNavigationBarThemeData(
+                backgroundColor: Colors.white,
+                selectedItemColor: Colors.indigo,
+                unselectedItemColor: Colors.indigo,
+              ),
               scaffoldBackgroundColor: Colors.white,
               accentColorBrightness: Brightness.dark,
-              textTheme: TextTheme(
-                headline6: TextStyle(
-                  fontFamily: 'Poppins',
-                ),
-              ),
               buttonTheme: ButtonTheme.of(context).copyWith(
                 buttonColor: Colors.indigo,
                 textTheme: ButtonTextTheme.primary,
@@ -61,7 +63,19 @@ class MyApp extends StatelessWidget {
           ).copyWith(
             id: 'dark_theme',
             data: ThemeData.dark().copyWith(
+              appBarTheme: AppBarTheme(
+                color: Color(0xff2a2a2a),
+              ),
+              primaryColor: Color(0xff03dac6),
+              accentColor: Color(0xff03dac6),
+              cardColor: Color(0xff2a2a2a),
+              bottomNavigationBarTheme: BottomNavigationBarThemeData(
+                backgroundColor: Color(0xff2a2a2a),
+                selectedItemColor: Color(0xff03dac6),
+                unselectedItemColor: Color(0xff03dac6),
+              ),
               buttonTheme: ButtonTheme.of(context).copyWith(
+                buttonColor: Color(0xff03dac6),
                 textTheme: ButtonTextTheme.primary,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),

@@ -33,6 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   'isSold',
                   isEqualTo: false,
                 )
+                .orderBy('createdAt', descending: true)
                 .snapshots(),
             builder: (context, snapshot) {
               Provider.of<AdProvider>(context, listen: false).getUserLocation();

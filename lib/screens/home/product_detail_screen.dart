@@ -230,7 +230,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                         decoration: BoxDecoration(
                                           shape: BoxShape.circle,
                                           color: current == index
-                                              ? Theme.of(context).accentColor
+                                              ? Theme.of(context)
+                                                  .scaffoldBackgroundColor
                                               : Colors.grey,
                                         ),
                                       );
@@ -276,7 +277,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                   child: Container(
                                     height: 100,
                                     decoration: BoxDecoration(
-                                      color: Colors.grey[200],
+                                      color: Theme.of(context).cardColor,
                                     ),
                                     child: Column(
                                       mainAxisAlignment:
@@ -314,7 +315,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                   child: Container(
                                     height: 100,
                                     decoration: BoxDecoration(
-                                      color: Colors.grey[200],
+                                      color: Theme.of(context).cardColor,
                                     ),
                                     child: Column(
                                       mainAxisAlignment:
@@ -341,7 +342,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                                   ),
                                                 )
                                               : Text(
-                                                  '${locSnapshot.data} kms from your location',
+                                                  '${(locSnapshot.data as double).toStringAsFixed(2)} kms from your location',
                                                   textAlign: TextAlign.center,
                                                   style: TextStyle(
                                                     fontFamily: 'Poppins',
@@ -360,7 +361,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                   child: Container(
                                     height: 100,
                                     decoration: BoxDecoration(
-                                      color: Colors.grey[200],
+                                      color: Theme.of(context).cardColor,
                                     ),
                                     child: Column(
                                       mainAxisAlignment:

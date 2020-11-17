@@ -176,7 +176,8 @@ class _AddingImagesScreenState extends State<AddingImagesScreen> {
                                         decoration: BoxDecoration(
                                           shape: BoxShape.circle,
                                           color: current == index
-                                              ? Theme.of(context).accentColor
+                                              ? Theme.of(context)
+                                                  .scaffoldBackgroundColor
                                               : Colors.grey,
                                         ),
                                       );
@@ -191,7 +192,8 @@ class _AddingImagesScreenState extends State<AddingImagesScreen> {
                                         decoration: BoxDecoration(
                                           shape: BoxShape.circle,
                                           color: current == index
-                                              ? Theme.of(context).accentColor
+                                              ? Theme.of(context)
+                                                  .scaffoldBackgroundColor
                                               : Colors.grey,
                                         ),
                                       );
@@ -229,7 +231,7 @@ class _AddingImagesScreenState extends State<AddingImagesScreen> {
                           child: Container(
                             alignment: Alignment.center,
                             height: MediaQuery.of(context).size.width / 3 - 10,
-                            color: Colors.grey[200],
+                            color: Theme.of(context).cardColor,
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -266,7 +268,7 @@ class _AddingImagesScreenState extends State<AddingImagesScreen> {
                               alignment: Alignment.center,
                               height:
                                   MediaQuery.of(context).size.width / 3 - 10,
-                              color: Colors.grey[200],
+                              color: Theme.of(context).cardColor,
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -288,7 +290,7 @@ class _AddingImagesScreenState extends State<AddingImagesScreen> {
                       Expanded(
                           flex: 1,
                           child: Container(
-                            color: Theme.of(context).accentColor,
+                            color: Theme.of(context).scaffoldBackgroundColor,
                           )),
                     ],
                   ),

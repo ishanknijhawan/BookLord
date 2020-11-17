@@ -107,7 +107,7 @@ class _NewMessageState extends State<NewMessage> {
               ),
               padding: EdgeInsets.symmetric(horizontal: 8),
               decoration: BoxDecoration(
-                color: Theme.of(context).accentColor,
+                color: Theme.of(context).scaffoldBackgroundColor,
                 borderRadius: BorderRadius.circular(15),
                 boxShadow: [
                   //background color of box

@@ -81,10 +81,10 @@ class _BookInfoFormState extends State<BookInfoForm> {
                       TextFormField(
                         key: ValueKey('title'),
                         validator: (value) {
-                          if (value.length > 10) {
+                          if (value.length > 8) {
                             return null;
                           } else {
-                            return 'Title should be more than 10 characters';
+                            return 'Title should be more than 8 characters';
                           }
                         },
                         decoration: InputDecoration(
