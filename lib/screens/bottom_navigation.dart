@@ -60,7 +60,15 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
               actions: selectedPageIndex == 0
                   ? [
                       IconButton(
-                        icon: Icon(Icons.search),
+                        icon: Icon(
+                          Icons.sort_outlined,
+                        ),
+                        onPressed: () {},
+                      ),
+                      IconButton(
+                        icon: Icon(
+                          Icons.search,
+                        ),
                         onPressed: () {
                           showSearch(context: context, delegate: Search());
                         },

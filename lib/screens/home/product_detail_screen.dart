@@ -265,6 +265,18 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               ),
                             ),
                           ),
+                          Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              children: [
+                                Text(
+                                  'Author: ${documents['author']}',
+                                  style: TextStyle(
+                                      fontFamily: 'Poppins', fontSize: 18),
+                                )
+                              ],
+                            ),
+                          ),
                           SizedBox(
                             height: 10,
                           ),
@@ -342,7 +354,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                                   ),
                                                 )
                                               : Text(
-                                                  '${(locSnapshot.data as double).toStringAsFixed(2)} kms from your location',
+                                                  (locSnapshot.data as double) <
+                                                          1000
+                                                      ? '${(locSnapshot.data as double).toStringAsFixed(2)} m from your location'
+                                                      : '${((locSnapshot.data as double) / 1000).toStringAsFixed(2)} km from your location',
                                                   textAlign: TextAlign.center,
                                                   style: TextStyle(
                                                     fontFamily: 'Poppins',
@@ -486,7 +501,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   );
                 });
           }),
-      floatingActionButton: !isMe
+      floatingActionButton: !isMe || !isSold
           ? FloatingActionButton.extended(
               backgroundColor: Theme.of(context).primaryColor,
               foregroundColor: Colors.white,

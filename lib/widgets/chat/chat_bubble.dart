@@ -58,7 +58,10 @@ class MessageBubble extends StatelessWidget {
                       textAlign: TextAlign.start,
                       style: isMe
                           ? Theme.of(context).textTheme.subtitle2
-                          : Theme.of(context).textTheme.subtitle1,
+                          : TextStyle(
+                              color: Theme.of(context).scaffoldBackgroundColor,
+                              fontFamily: 'Poppins',
+                            ),
                     )
                   : Container(
                       height: 150,

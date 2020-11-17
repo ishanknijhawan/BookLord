@@ -17,26 +17,22 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: FirebaseAuth.instance.currentUser(),
-      builder: (ctx, userData) {
-        if (userData.connectionState == ConnectionState.waiting) {
-          return Center(
-            child: CircularProgressIndicator(
-              backgroundColor: Theme.of(context).primaryColor,
-            ),
-          );
-        }
-        return StreamBuilder(
+        future: FirebaseAuth.instance.currentUser(),
+        builder: (ctx, userData) {
+          if (userData.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(
+                backgroundColor: Theme.of(context).primaryColor,
+              ),
+            );
+          }
+          return StreamBuilder(
             stream: Firestore.instance
                 .collection('products')
-                .where(
-                  'isSold',
-                  isEqualTo: false,
-                )
                 .orderBy('createdAt', descending: true)
+                //.where('isSold', isEqualTo: false)
                 .snapshots(),
             builder: (context, snapshot) {
-              Provider.of<AdProvider>(context, listen: false).getUserLocation();
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return Center(
                   child: CircularProgressIndicator(
@@ -50,7 +46,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Text('No ads here'),
                 );
               }
-
               return Padding(
                 padding: EdgeInsets.all(10),
                 child: GridView.builder(
@@ -70,8 +65,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               );
-            });
-      },
-    );
+            },
+          );
+        });
   }
 }
