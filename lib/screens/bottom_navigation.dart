@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
+
 import './tabs/home_screen.dart';
 import 'tabs/users_chat_screen.dart';
 import './tabs/profile_screen.dart';
 import 'tabs/ads_tab_screen.dart';
 import 'tabs/add_product_screen.dart';
-
 import 'package:chat_app/screens/home/search.dart';
 
 class BottomNavigationScreen extends StatefulWidget {
@@ -20,6 +21,21 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
 
   @override
   void initState() {
+    final fcm = FirebaseMessaging();
+    fcm.configure(
+      onMessage: (msg) => Navigator.of(context).pushNamed(
+        UsersChatScreen.routeName,
+      ),
+      onLaunch: (msg) => Navigator.of(context).pushNamed(
+        UsersChatScreen.routeName,
+      ),
+      onResume: (msg) => Navigator.of(context).pushNamed(
+        UsersChatScreen.routeName,
+      ),
+    );
+
+    fcm.subscribeToTopic('chats');
+
     _pages = [
       {
         'pages': HomeScreen(),

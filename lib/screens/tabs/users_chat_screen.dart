@@ -38,7 +38,10 @@ class UsersChatScreen extends StatelessWidget {
               );
             }
             return StreamBuilder(
-              stream: Firestore.instance.collection('chats').snapshots(),
+              stream: Firestore.instance
+                  .collection('chats')
+                  .orderBy('timeStamp', descending: true)
+                  .snapshots(),
               builder: (context, snapShot) {
                 if (snapShot.connectionState == ConnectionState.waiting) {
                   return Center(
