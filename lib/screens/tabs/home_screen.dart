@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as fauth;
 import 'package:provider/provider.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'package:chat_app/widgets/home/ad_item.dart';
 import 'package:chat_app/provider/ad_provider.dart';
@@ -26,6 +27,15 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             );
           }
+
+          final firebaseMessaging = FirebaseMessaging();
+          firebaseMessaging.getToken().then((token) => Firestore.instance
+                  .collection('users')
+                  .document(userData.data.uid)
+                  .updateData(
+                {'token': token},
+              ));
+
           return StreamBuilder(
             stream: Firestore.instance
                 .collection('products')

@@ -42,6 +42,7 @@ class _AuthScreenState extends State<AuthScreen> {
       'name': authResult.user.displayName,
       'uid': authResult.user.uid,
       'profilePicture': authResult.user.photoUrl,
+      'token': '',
     });
     return authResult;
   }
@@ -71,6 +72,7 @@ class _AuthScreenState extends State<AuthScreen> {
           'name': userName,
           'uid': authResult.user.uid,
           'profilePicture': '',
+          'token': '',
         });
         //not needed if using StreamBuilder in main.dart
         // Navigator.of(context).pushNamed(

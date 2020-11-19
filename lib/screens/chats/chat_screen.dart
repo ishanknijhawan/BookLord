@@ -1,3 +1,4 @@
+import 'package:chat_app/screens/tabs/users_chat_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'package:chat_app/models/user.dart';
@@ -17,6 +18,11 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     final userData = ModalRoute.of(context).settings.arguments as User;
+    print('data is $userData');
+    print('name is ${userData.userName}');
+    print('email is ${userData.email}');
+    print('profile is ${userData.profilePicture}');
+    print('uid is ${userData.uid}');
     String documentId = '';
     return Scaffold(
       appBar: AppBar(
@@ -59,8 +65,12 @@ class _ChatScreenState extends State<ChatScreen> {
             }
             if (userData.uid.compareTo(mySnapshot.data.uid) > 0) {
               documentId = mySnapshot.data.uid + userData.uid;
+              print('coming here 1');
+              print('documentId is $documentId');
             } else {
               documentId = userData.uid + mySnapshot.data.uid;
+              print('coming here 2');
+              print('documentId is $documentId');
             }
             return Column(
               children: [

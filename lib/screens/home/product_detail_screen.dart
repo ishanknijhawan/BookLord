@@ -20,7 +20,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   String mapUrl = '';
   final Map<int, String> cal = {
     1: 'Jan',
-    2: 'Fab',
+    2: 'Feb',
     3: 'Mar',
     4: 'Apr',
     5: 'May',

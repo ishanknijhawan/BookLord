@@ -4,25 +4,24 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'package:chat_app/screens/chats/chat_screen.dart';
 import 'package:chat_app/models/user.dart';
 
-class UsersChatScreen extends StatelessWidget {
+class UsersChatScreen extends StatefulWidget {
   static const routeName = '/chatScreen';
+
+  @override
+  _UsersChatScreenState createState() => _UsersChatScreenState();
+}
+
+class _UsersChatScreenState extends State<UsersChatScreen> {
   var docId;
   var receiverId;
   var receiverName;
   var receiverProfile;
   var receiverEmail;
-
-  // Future<void> getUserByReceiverId(String id) async {
-  //   final user =
-  //       await Firestore.instance.collection('users').document(id).get();
-  //   receiverName = user.data['name'];
-  //   receiverProfile = user.data['profilePicture'];
-  //   receiverEmail = user.data['email'];
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +36,7 @@ class UsersChatScreen extends StatelessWidget {
                 ),
               );
             }
+
             return StreamBuilder(
               stream: Firestore.instance
                   .collection('chats')
@@ -56,6 +56,7 @@ class UsersChatScreen extends StatelessWidget {
                 return ListView.builder(
                   itemCount: documents.length,
                   itemBuilder: (context, index) {
+                    print('${index + 1} times it comes here');
                     docId = documents[index]['docId'].toString();
                     if (docId.contains(userData.data.uid)) {
                       receiverId =
@@ -73,6 +74,7 @@ class UsersChatScreen extends StatelessWidget {
                             }
                             receiverEmail = receiverData.data['email'];
                             receiverName = receiverData.data['name'];
+                            receiverId = receiverData.data['uid'];
                             receiverProfile =
                                 receiverData.data['profilePicture'];
                             return Container(
@@ -80,48 +82,57 @@ class UsersChatScreen extends StatelessWidget {
                                 vertical: 0,
                               ),
                               child: ListTile(
-                                onTap: () => Navigator.of(context).pushNamed(
-                                  ChatScreen.routeName,
-                                  arguments: User(
-                                    userName: receiverName,
-                                    email: receiverEmail,
-                                    profilePicture: receiverProfile,
-                                    uid: receiverId,
+                                  key: ValueKey(receiverId),
+                                  leading: receiverProfile == ''
+                                      ? Container(
+                                          width: 50,
+                                          height: 50,
+                                          decoration: BoxDecoration(
+                                              shape: BoxShape.circle),
+                                          child: SvgPicture.asset(
+                                              'assets/images/boy.svg'),
+                                        )
+                                      : CircleAvatar(
+                                          radius: 25,
+                                          backgroundImage:
+                                              NetworkImage(receiverProfile),
+                                        ),
+                                  title: Text(
+                                    receiverName,
+                                    style: TextStyle(fontSize: 20),
                                   ),
-                                ),
-                                leading: receiverProfile == ''
-                                    ? Container(
-                                        width: 50,
-                                        height: 50,
-                                        decoration: BoxDecoration(
-                                            shape: BoxShape.circle),
-                                        child: SvgPicture.asset(
-                                            'assets/images/boy.svg'),
-                                      )
-                                    : CircleAvatar(
-                                        radius: 25,
-                                        backgroundImage:
-                                            NetworkImage(receiverProfile),
+                                  subtitle: Text(
+                                    documents[index]['senderId'] == receiverId
+                                        ? documents[index]['lastMessage']
+                                        : 'You: ${documents[index]['lastMessage']}',
+                                  ),
+                                  trailing: Text(
+                                    DateFormat('HH:mm').format(
+                                      (documents[index]['timeStamp']
+                                              as Timestamp)
+                                          .toDate(),
+                                    ),
+                                    style: TextStyle(
+                                      color: Colors.grey[600],
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    print('receiverName is $receiverName');
+                                    Navigator.of(context).pushNamed(
+                                      ChatScreen.routeName,
+                                      arguments: User(
+                                        userName: receiverData.data['name'],
+                                        email: receiverData.data['email'],
+                                        profilePicture:
+                                            receiverData.data['profilePicture'],
+                                        uid: receiverData.data['uid'],
                                       ),
-                                title: Text(
-                                  receiverName,
-                                  style: TextStyle(fontSize: 20),
-                                ),
-                                subtitle: Text(
-                                  documents[index]['senderId'] == receiverId
-                                      ? documents[index]['lastMessage']
-                                      : 'You: ${documents[index]['lastMessage']}',
-                                ),
-                                trailing: Text(
-                                  DateFormat('HH:mm').format(
-                                    (documents[index]['timeStamp'] as Timestamp)
-                                        .toDate(),
+                                    );
+                                  }
+                                  //     .then((_) {
+                                  //   setState(() {});
+                                  // }),
                                   ),
-                                  style: TextStyle(
-                                    color: Colors.grey[600],
-                                  ),
-                                ),
-                              ),
                             );
                           });
                     } else

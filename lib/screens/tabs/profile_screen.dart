@@ -142,6 +142,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                         ),
                         SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          snapshot.data['email'],
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 16,
+                          ),
+                        ),
+                        SizedBox(
                           height: 10,
                         ),
                         ProfileSwitches(),
