@@ -77,11 +77,10 @@ From this screen, user can follow the steps for posting an ad. The first 2 scree
 | **Price and Location screen**                                | **Donate a book**                                            |                                                              |
 | <img src="https://user-images.githubusercontent.com/45118110/99719103-e39a3e00-2ad1-11eb-9f67-c6905c8b075b.jpg" style="zoom:25%;" /> | <img src="https://user-images.githubusercontent.com/45118110/99719110-e5640180-2ad1-11eb-84df-f4f8b799942a.jpg" style="zoom:25%;" /> |                                                              |
 
-### Push Notifications
+### Push Notifications and Profile Screen
 
 BookLord also supports push notifications in the chat section. As soon as the user sends a message to the other person, he will receive a notification for the same. Below is the sample for that.
 
-| Push Notifications                                           |
-| ------------------------------------------------------------ |
-| <img src="https://user-images.githubusercontent.com/45118110/99719616-8ce13400-2ad2-11eb-9b3f-92dbb9633011.jpg" style="zoom:25%;" /> |
-
+| Push Notifications                                           | Profile Screen Profile pic upload                            | Dark Theme toggle                                            |
+| ------------------------------------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| <img src="https://user-images.githubusercontent.com/45118110/99719616-8ce13400-2ad2-11eb-9b3f-92dbb9633011.jpg" style="zoom:25%;" /> | <img src="https://user-images.githubusercontent.com/45118110/99720095-37f1ed80-2ad3-11eb-90c1-3b43960b67df.jpg" style="zoom:25%;" /> | <img src="https://user-images.githubusercontent.com/45118110/99720087-345e6680-2ad3-11eb-8aac-fef79460d762.jpg" style="zoom:25%;" /> |
