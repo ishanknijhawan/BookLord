@@ -178,7 +178,7 @@ class AdProvider with ChangeNotifier {
           )
           .collection('messages')
           .add({
-        'message': '',
+        'message': 'Photo',
         'imageUrl': url,
         'senderId': senderId,
         'receiverId': receiverId,
