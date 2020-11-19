@@ -25,8 +25,14 @@ class _UsersChatScreenState extends State<UsersChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: FutureBuilder(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'Chats',
+          style: TextStyle(fontFamily: 'Poppins'),
+        ),
+      ),
+      body: FutureBuilder(
           future: FirebaseAuth.instance.currentUser(),
           builder: (context, userData) {
             if (userData.connectionState == ConnectionState.waiting) {

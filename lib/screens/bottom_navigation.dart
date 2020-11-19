@@ -23,15 +23,27 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
   void initState() {
     final fcm = FirebaseMessaging();
     fcm.configure(
-      onMessage: (msg) => Navigator.of(context).pushNamed(
-        UsersChatScreen.routeName,
-      ),
-      onLaunch: (msg) => Navigator.of(context).pushNamed(
-        UsersChatScreen.routeName,
-      ),
-      onResume: (msg) => Navigator.of(context).pushNamed(
-        UsersChatScreen.routeName,
-      ),
+      onMessage: (msg) {
+        print('onMessage');
+        print(msg);
+        return Navigator.of(context).pushNamed(
+          UsersChatScreen.routeName,
+        );
+      },
+      onLaunch: (msg) {
+        print('onLaunch');
+        print(msg);
+        return Navigator.of(context).pushNamed(
+          UsersChatScreen.routeName,
+        );
+      },
+      onResume: (msg) {
+        print('onResume');
+        print(msg);
+        return Navigator.of(context).pushNamed(
+          UsersChatScreen.routeName,
+        );
+      },
     );
 
     fcm.subscribeToTopic('chats');
@@ -64,7 +76,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: selectedPageIndex == 1
+      appBar: selectedPageIndex == 1 || selectedPageIndex == 3
           ? null
           : AppBar(
               title: Text(
