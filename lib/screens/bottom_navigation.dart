@@ -72,7 +72,9 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: selectedPageIndex == 1 || selectedPageIndex == 3
+      appBar: selectedPageIndex == 0 ||
+              selectedPageIndex == 1 ||
+              selectedPageIndex == 3
           ? null
           : AppBar(
               title: Text(
@@ -81,24 +83,6 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
                   fontFamily: 'Poppins',
                 ),
               ),
-              actions: selectedPageIndex == 0
-                  ? [
-                      IconButton(
-                        icon: Icon(
-                          Icons.sort_outlined,
-                        ),
-                        onPressed: () {},
-                      ),
-                      IconButton(
-                        icon: Icon(
-                          Icons.search,
-                        ),
-                        onPressed: () {
-                          showSearch(context: context, delegate: Search());
-                        },
-                      )
-                    ]
-                  : [],
             ),
       body: _pages[selectedPageIndex]['pages'],
       bottomNavigationBar: BottomNavigationBar(

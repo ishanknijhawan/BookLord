@@ -30,7 +30,7 @@ class Categories {
       ],
     },
     {
-      'category': 'Competetive',
+      'category': 'Competitive',
       'further': [
         'CAT',
         'IIT JEE',

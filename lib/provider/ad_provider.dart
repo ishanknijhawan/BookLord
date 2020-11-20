@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -77,6 +78,21 @@ class AdProvider with ChangeNotifier {
     return distance;
   }
 
+  double getDistanceFromCoordinates2(
+    double lat1,
+    double long1,
+    double lat2,
+    double long2,
+  ) {
+    final distance = Geolocator.distanceBetween(
+      lat1,
+      long1,
+      lat2,
+      long2,
+    );
+    return distance;
+  }
+
   void addTitleAndStuff(
     String title,
     String desc,
@@ -99,7 +115,7 @@ class AdProvider with ChangeNotifier {
     if (_adModel == null) {
       _adModel = AdModel();
     }
-    _adModel.images = images;
+    _adModel.fileImages = images;
   }
 
   void addImageAssets(List<Asset> images) {
@@ -210,17 +226,17 @@ class AdProvider with ChangeNotifier {
     }
     if (_adModel.imageAssets == null) {
       print('coming here 1');
-      for (int i = 0; i < _adModel.images.length; i++) {
+      for (int i = 0; i < _adModel.fileImages.length; i++) {
         final ref = FirebaseStorage.instance
             .ref()
             .child(emailForImage)
             .child(imageChildPath)
             .child(DateTime.now().millisecondsSinceEpoch.toString() + '.jpg');
-        await ref.putFile(_adModel.images[i]);
+        await ref.putFile(_adModel.fileImages[i]);
         final url = await ref.getDownloadURL();
         downloadedPaths.add(url);
       }
-    } else if (_adModel.images == null) {
+    } else if (_adModel.fileImages == null) {
       print('coming here 2');
       for (int i = 0; i < _adModel.imageAssets.length; i++) {
         ByteData byteData = await _adModel.imageAssets[i].getByteData();

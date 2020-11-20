@@ -30,7 +30,7 @@ class _MyAdsState extends State<MyAds> {
         var documents = snapshot.data.documents;
         if (snapshot.data.documents.length == 0) {
           return Center(
-            child: Text('No ads here'),
+            child: Text('You haven\'t posted any ads'),
           );
         }
         return Padding(
