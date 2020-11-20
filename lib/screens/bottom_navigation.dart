@@ -26,16 +26,12 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
       onMessage: (msg) {
         print('onMessage');
         print(msg);
-        return Navigator.of(context).pushNamed(
-          UsersChatScreen.routeName,
-        );
+        return;
       },
       onLaunch: (msg) {
         print('onLaunch');
         print(msg);
-        return Navigator.of(context).pushNamed(
-          UsersChatScreen.routeName,
-        );
+        return;
       },
       onResume: (msg) {
         print('onResume');
