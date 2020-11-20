@@ -40,9 +40,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   void deleteAd(BuildContext ctx) async {
     Navigator.of(ctx).pop();
-    await Firestore.instance
+    await FirebaseFirestore.instance
         .collection('products')
-        .document(
+        .doc(
           docId.toString(),
         )
         .delete();
@@ -50,12 +50,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   void markAsSold(BuildContext ctx) async {
     Navigator.of(ctx).pop();
-    await Firestore.instance
+    await FirebaseFirestore.instance
         .collection('products')
-        .document(
+        .doc(
           docId.toString(),
         )
-        .updateData({'isSold': true});
+        .update({'isSold': true});
     setState(() {
       isSold = true;
     });
@@ -64,26 +64,26 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   @override
   Widget build(BuildContext context) {
     ctx = context;
-    User userData;
+    UserModel userData;
     final args =
         ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
     final DocumentSnapshot documents = args['documents'];
-    docId = documents['id'];
+    docId = documents.data()['id'];
     final bool isMe = args['isMe'];
-    isSold = documents['isSold'];
-    final images = documents['images'] as List<dynamic>;
-    Timestamp dateTime = documents['createdAt'];
+    isSold = documents.data()['isSold'];
+    final images = documents.data()['images'] as List<dynamic>;
+    Timestamp dateTime = documents.data()['createdAt'];
 
     mapUrl =
         Provider.of<AdProvider>(context, listen: false).getLocationFromLatLang(
-      latitude: (documents['location']['latitude'] as double),
-      longitude: (documents['location']['longitude'] as double),
+      latitude: (documents.data()['location']['latitude'] as double),
+      longitude: (documents.data()['location']['longitude'] as double),
     );
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          documents['title'],
+          documents.data()['title'],
         ),
         actions: isMe
             ? [
@@ -167,15 +167,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       ),
       body: FutureBuilder(
           future: Provider.of<AdProvider>(context).getUserDataFromUid(
-            documents['uid'],
+            documents.data()['uid'],
           ),
           builder: (context, userSnapshot) {
             userData = userSnapshot.data;
             return FutureBuilder(
                 future: Provider.of<AdProvider>(context, listen: false)
                     .getDistanceFromCoordinates(
-                  documents['location']['latitude'] as double,
-                  documents['location']['longitude'] as double,
+                  documents.data()['location']['latitude'] as double,
+                  documents.data()['location']['longitude'] as double,
                 ),
                 builder: (context, locSnapshot) {
                   return Padding(
@@ -187,7 +187,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           Stack(
                             children: [
                               Hero(
-                                tag: documents['id'],
+                                tag: documents.data()['id'],
                                 child: CarouselSlider.builder(
                                   itemCount: images.length,
                                   itemBuilder: (ctx, i) {
@@ -245,7 +245,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 16),
                             child: Text(
-                              documents['description'],
+                              documents.data()['description'],
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 18,
@@ -258,7 +258,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 16),
                             child: Text(
-                              isSold ? 'Sold' : '₹${documents['price']}',
+                              isSold ? 'Sold' : '₹${documents.data()['price']}',
                               style: TextStyle(
                                 fontSize: 22,
                                 fontWeight: FontWeight.bold,
@@ -270,7 +270,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             child: Column(
                               children: [
                                 Text(
-                                  'Author: ${documents['author']}',
+                                  'Author: ${documents.data()['author']}',
                                   style: TextStyle(
                                       fontFamily: 'Poppins', fontSize: 18),
                                 )
@@ -307,7 +307,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                           padding: EdgeInsets.symmetric(
                                               horizontal: 4),
                                           child: Text(
-                                            documents['condition'] +
+                                            documents.data()['condition'] +
                                                 ' condition',
                                             textAlign: TextAlign.center,
                                             style: TextStyle(

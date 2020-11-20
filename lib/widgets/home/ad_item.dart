@@ -61,10 +61,10 @@ class _AdItemState extends State<AdItem> {
                     ),
                     child: IconButton(
                       onPressed: () {
-                        Firestore.instance
+                        FirebaseFirestore.instance
                             .collection('products')
-                            .document(widget.documents['id'].toString())
-                            .updateData({'isFav': !widget.documents['isFav']});
+                            .doc(widget.documents['id'].toString())
+                            .update({'isFav': !widget.documents['isFav']});
                       },
                       alignment: Alignment.center,
                       icon: widget.documents['isFav']

@@ -68,9 +68,9 @@ class _NewMessageState extends State<NewMessage> {
     //FocusScope.of(context).unfocus();
     final ts = Timestamp.now();
     messageController.clear();
-    await Firestore.instance
+    await FirebaseFirestore.instance
         .collection('chats')
-        .document(widget.documentId)
+        .doc(widget.documentId)
         .collection('messages')
         .add({
       'message': enteredMessage,
@@ -79,10 +79,10 @@ class _NewMessageState extends State<NewMessage> {
       'receiverId': widget.receiverId,
       'timeStamp': ts,
     });
-    await Firestore.instance
+    await FirebaseFirestore.instance
         .collection('chats')
-        .document(widget.documentId)
-        .setData(
+        .doc(widget.documentId)
+        .set(
       {
         'docId': widget.documentId,
         'lastMessage': enteredMessage,

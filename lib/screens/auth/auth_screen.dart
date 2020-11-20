@@ -16,9 +16,9 @@ class AuthScreen extends StatefulWidget {
 
 class _AuthScreenState extends State<AuthScreen> {
   bool isLoading = false;
-  AuthResult authResult;
+  UserCredential authResult;
 
-  Future<AuthResult> _signInWithGoogle() async {
+  Future<UserCredential> _signInWithGoogle() async {
     // Trigger the authentication flow
     final GoogleSignInAccount googleUser = await GoogleSignIn().signIn();
 
@@ -27,21 +27,21 @@ class _AuthScreenState extends State<AuthScreen> {
         await googleUser.authentication;
 
     // Create a new credential
-    final AuthCredential credential = GoogleAuthProvider.getCredential(
+    final AuthCredential credential = GoogleAuthProvider.credential(
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
     );
 
     // Once signed in, return the UserCredential
     authResult = await FirebaseAuth.instance.signInWithCredential(credential);
-    Firestore.instance
+    FirebaseFirestore.instance
         .collection('users')
-        .document(authResult.user.uid)
-        .setData({
+        .doc(authResult.user.uid)
+        .set({
       'email': authResult.user.email,
       'name': authResult.user.displayName,
       'uid': authResult.user.uid,
-      'profilePicture': authResult.user.photoUrl,
+      'profilePicture': authResult.user.photoURL,
       'token': '',
     });
     return authResult;
@@ -58,16 +58,16 @@ class _AuthScreenState extends State<AuthScreen> {
       setState(() {
         isLoading = true;
       });
-      AuthResult authResult;
+      UserCredential authResult;
       if (!isLogin) {
         authResult = await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: email,
           password: password,
         );
-        Firestore.instance
+        FirebaseFirestore.instance
             .collection('users')
-            .document(authResult.user.uid)
-            .setData({
+            .doc(authResult.user.uid)
+            .set({
           'email': email,
           'name': userName,
           'uid': authResult.user.uid,
@@ -92,7 +92,7 @@ class _AuthScreenState extends State<AuthScreen> {
       setState(() {
         isLoading = false;
       });
-      Scaffold.of(context).showSnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('An error occured, please check your credentials'),
           backgroundColor: Theme.of(context).errorColor,

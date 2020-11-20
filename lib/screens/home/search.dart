@@ -43,37 +43,37 @@ class Search extends SearchDelegate {
     print('query is $query');
 
     void getData() async {
-      var data = await Firestore.instance
+      var data = await FirebaseFirestore.instance
           .collection('products')
           .where('isSold', isEqualTo: false)
           .where(('title').toLowerCase(), isEqualTo: query.toLowerCase())
-          .getDocuments();
-      documents = data.documents;
+          .get();
+      documents = data.docs;
 
       documents.map((e) {
         ttList.add(AdModel(
-          title: e['title'],
-          author: e['author'],
-          categories: e['categories'],
-          isFav: e['isFav'],
-          isSold: e['isSold'],
-          condition: e['condition'],
-          description: e['description'],
-          id: e['id'],
+          title: e.data()['title'],
+          author: e.data()['author'],
+          categories: e.data()['categories'],
+          isFav: e.data()['isFav'],
+          isSold: e.data()['isSold'],
+          condition: e.data()['condition'],
+          description: e.data()['description'],
+          id: e.data()['id'],
           location: AdLocation(
-            latitude: e['location']['latitude'],
-            longitude: e['location']['longitude'],
-            address: e['location']['address'],
+            latitude: e.data()['location']['latitude'],
+            longitude: e.data()['location']['longitude'],
+            address: e.data()['location']['address'],
           ),
-          price: e['price'],
-          userId: e['uid'],
+          price: e.data()['price'],
+          userId: e.data()['uid'],
         ));
-        images.add(e['images'] as List<String>);
+        images.add(e.data()['images'] as List<String>);
       });
     }
 
-    void getUserData() async {
-      final user = await FirebaseAuth.instance.currentUser();
+    void getUserData() {
+      final user = FirebaseAuth.instance.currentUser;
       uid = user.uid;
     }
 
@@ -85,11 +85,11 @@ class Search extends SearchDelegate {
       child: GridView.builder(
         itemCount: documents.length,
         itemBuilder: (context, i) {
-          return documents[i]['uid'] == uid
+          return documents[i].data()['uid'] == uid
               ? null
               : AdItem(
-                  documents[i],
-                  documents[i]['uid'] == uid,
+                  documents[i].data(),
+                  documents[i].data()['uid'] == uid,
                   uid,
                 );
         },

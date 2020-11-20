@@ -17,13 +17,22 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
-    final userData = ModalRoute.of(context).settings.arguments as User;
+    final userData = ModalRoute.of(context).settings.arguments as UserModel;
     print('data is $userData');
     print('name is ${userData.userName}');
     print('email is ${userData.email}');
     print('profile is ${userData.profilePicture}');
     print('uid is ${userData.uid}');
-    String documentId = '';
+    var documentId = '';
+
+    final uid = FirebaseAuth.instance.currentUser.uid;
+
+    if (userData.uid.compareTo(uid) > 0) {
+      documentId = uid + userData.uid;
+    } else {
+      documentId = userData.uid + uid;
+    }
+
     return Scaffold(
       appBar: AppBar(
         leading: Container(
@@ -53,42 +62,22 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
         title: Text(userData.userName),
       ),
-      body: FutureBuilder(
-          future: FirebaseAuth.instance.currentUser(),
-          builder: (context, mySnapshot) {
-            if (mySnapshot.connectionState == ConnectionState.waiting) {
-              return Center(
-                child: CircularProgressIndicator(
-                  backgroundColor: Theme.of(context).primaryColor,
-                ),
-              );
-            }
-            if (userData.uid.compareTo(mySnapshot.data.uid) > 0) {
-              documentId = mySnapshot.data.uid + userData.uid;
-              print('coming here 1');
-              print('documentId is $documentId');
-            } else {
-              documentId = userData.uid + mySnapshot.data.uid;
-              print('coming here 2');
-              print('documentId is $documentId');
-            }
-            return Column(
-              children: [
-                Expanded(
-                  child: Messages(
-                    documentId: documentId,
-                    senderId: mySnapshot.data.uid,
-                    receiverId: userData.uid,
-                  ),
-                ),
-                NewMessage(
-                  documentId: documentId,
-                  senderId: mySnapshot.data.uid,
-                  receiverId: userData.uid,
-                ),
-              ],
-            );
-          }),
+      body: Column(
+        children: [
+          Expanded(
+            child: Messages(
+              documentId: documentId,
+              senderId: uid,
+              receiverId: userData.uid,
+            ),
+          ),
+          NewMessage(
+            documentId: documentId,
+            senderId: uid,
+            receiverId: userData.uid,
+          ),
+        ],
+      ),
     );
   }
 }

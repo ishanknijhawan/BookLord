@@ -16,7 +16,7 @@ class Messages extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-        stream: Firestore.instance
+        stream: FirebaseFirestore.instance
             .collection('chats/$documentId/messages')
             .orderBy('timeStamp', descending: true)
             .snapshots(),

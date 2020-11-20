@@ -60,143 +60,129 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
   }
 
+  final uid = FirebaseAuth.instance.currentUser.uid;
+
   @override
   Widget build(BuildContext context) {
     ctx = context;
-    return FutureBuilder(
-        future: FirebaseAuth.instance.currentUser(),
-        builder: (ctx, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: CircularProgressIndicator(
-                backgroundColor: Theme.of(context).primaryColor,
-              ),
-            );
-          }
-          return StreamBuilder(
-            stream: Firestore.instance
-                .collection('users')
-                .document(snapshot.data.uid)
-                .snapshots(),
-            builder: (ctx, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(
-                  child: CircularProgressIndicator(
-                    backgroundColor: Theme.of(context).primaryColor,
-                  ),
-                );
-              }
+    return StreamBuilder(
+      stream:
+          FirebaseFirestore.instance.collection('users').doc(uid).snapshots(),
+      builder: (ctx, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(
+            child: CircularProgressIndicator(
+              backgroundColor: Theme.of(context).primaryColor,
+            ),
+          );
+        }
 
-              return Padding(
-                padding: EdgeInsets.all(0),
-                child: SingleChildScrollView(
-                  child: Container(
-                    width: double.infinity,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
+        return Padding(
+          padding: EdgeInsets.all(0),
+          child: SingleChildScrollView(
+            child: Container(
+              width: double.infinity,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(32.0),
+                    child: Stack(
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.all(32.0),
-                          child: Stack(
-                            children: [
-                              Container(
-                                alignment: Alignment.center,
-                                height: 120,
-                                width: 120,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  border:
-                                      Border.all(color: Colors.black, width: 2),
+                        Container(
+                          alignment: Alignment.center,
+                          height: 120,
+                          width: 120,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.black, width: 2),
+                          ),
+                          child: snapshot.data['profilePicture'] == ''
+                              ? SvgPicture.asset(
+                                  'assets/images/boy.svg',
+                                )
+                              : CircleAvatar(
+                                  radius: 60,
+                                  backgroundImage: NetworkImage(
+                                    snapshot.data['profilePicture'],
+                                  ),
                                 ),
-                                child: snapshot.data['profilePicture'] == ''
-                                    ? SvgPicture.asset(
-                                        'assets/images/boy.svg',
-                                      )
-                                    : CircleAvatar(
-                                        radius: 60,
-                                        backgroundImage: NetworkImage(
-                                          snapshot.data['profilePicture'],
-                                        ),
-                                      ),
-                              ),
-                              Positioned(
-                                  right: 0,
-                                  bottom: 0,
-                                  child: ImagePickerButton(
-                                    isLoading: isLoading,
-                                    ctx: ctx,
-                                    pickImage: _pickImage,
-                                    profilePic: snapshot.data['profilePicture'],
-                                  )),
-                            ],
-                          ),
                         ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Text(
-                          snapshot.data['name'],
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontSize: 24,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                          snapshot.data['email'],
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontSize: 16,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        ProfileSwitches(),
-                        SizedBox(
-                          height: 25,
-                        ),
-                        RaisedButton.icon(
-                          icon: Icon(
-                            Icons.logout,
-                          ),
-                          onPressed: () => showDialog(
-                              context: ctx,
-                              builder: (context) => AlertDialog(
-                                    title: Text('Logout ?'),
-                                    content: Text('Do you want to log out ?'),
-                                    actions: [
-                                      FlatButton(
-                                        child: Text(
-                                          'NO',
-                                          style: TextStyle(
-                                            color:
-                                                Theme.of(context).primaryColor,
-                                          ),
-                                        ),
-                                        onPressed: () =>
-                                            Navigator.of(context).pop(),
-                                      ),
-                                      RaisedButton(
-                                        child: Text('YES'),
-                                        onPressed: () {
-                                          _signOut();
-                                          Navigator.of(context).pop();
-                                        },
-                                      ),
-                                    ],
-                                  )),
-                          label: Text('Logout'),
-                        )
+                        Positioned(
+                            right: 0,
+                            bottom: 0,
+                            child: ImagePickerButton(
+                              isLoading: isLoading,
+                              ctx: ctx,
+                              pickImage: _pickImage,
+                              profilePic: snapshot.data['profilePicture'],
+                            )),
                       ],
                     ),
                   ),
-                ),
-              );
-            },
-          );
-        });
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Text(
+                    snapshot.data['name'],
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 24,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Text(
+                    snapshot.data['email'],
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 16,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  ProfileSwitches(),
+                  SizedBox(
+                    height: 25,
+                  ),
+                  RaisedButton.icon(
+                    icon: Icon(
+                      Icons.logout,
+                    ),
+                    onPressed: () => showDialog(
+                        context: ctx,
+                        builder: (context) => AlertDialog(
+                              title: Text('Logout ?'),
+                              content: Text('Do you want to log out ?'),
+                              actions: [
+                                FlatButton(
+                                  child: Text(
+                                    'NO',
+                                    style: TextStyle(
+                                      color: Theme.of(context).primaryColor,
+                                    ),
+                                  ),
+                                  onPressed: () => Navigator.of(context).pop(),
+                                ),
+                                RaisedButton(
+                                  child: Text('YES'),
+                                  onPressed: () {
+                                    _signOut();
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            )),
+                    label: Text('Logout'),
+                  )
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 }

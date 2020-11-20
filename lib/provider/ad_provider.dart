@@ -36,14 +36,14 @@ class AdProvider with ChangeNotifier {
     return url;
   }
 
-  Future<User> getUserDataFromUid(String uid) async {
+  Future<UserModel> getUserDataFromUid(String uid) async {
     final userData =
-        await Firestore.instance.collection('users').document(uid).get();
-    final user = User();
-    user.email = userData['email'];
-    user.userName = userData['name'];
-    user.profilePicture = userData['profilePicture'];
-    user.uid = userData['uid'];
+        await FirebaseFirestore.instance.collection('users').doc(uid).get();
+    final user = UserModel();
+    user.email = userData.data()['email'];
+    user.userName = userData.data()['name'];
+    user.profilePicture = userData.data()['profilePicture'];
+    user.uid = userData.data()['uid'];
 
     return user;
   }
@@ -120,7 +120,7 @@ class AdProvider with ChangeNotifier {
 
   Future<void> uploadProfilePicture(File imgFile) async {
     print('coming here 1');
-    var userId = await FirebaseAuth.instance.currentUser();
+    var userId = FirebaseAuth.instance.currentUser;
     var emailForImage = userId.email;
     var uid = userId.uid;
     print('uid is $uid');
@@ -131,23 +131,23 @@ class AdProvider with ChangeNotifier {
           .child(emailForImage)
           .child('ProfilePicture')
           .child(DateTime.now().millisecondsSinceEpoch.toString() + '.jpg');
-      await ref.putFile(imgFile).onComplete;
+      await ref.putFile(imgFile);
       final url = await ref.getDownloadURL();
       print('url is $url');
 
-      await Firestore.instance
+      await FirebaseFirestore.instance
           .collection('users')
-          .document(
+          .doc(
             uid,
           )
-          .updateData({'profilePicture': url});
+          .update({'profilePicture': url});
     } else {
-      await Firestore.instance
+      await FirebaseFirestore.instance
           .collection('users')
-          .document(
+          .doc(
             uid,
           )
-          .updateData({'profilePicture': ''});
+          .update({'profilePicture': ''});
     }
   }
 
@@ -157,7 +157,7 @@ class AdProvider with ChangeNotifier {
     String senderId,
     String receiverId,
   ) async {
-    var userId = await FirebaseAuth.instance.currentUser();
+    var userId = FirebaseAuth.instance.currentUser;
     var emailForImage = userId.email;
     final ts = Timestamp.now();
     var uid = userId.uid;
@@ -168,12 +168,12 @@ class AdProvider with ChangeNotifier {
           .child(emailForImage)
           .child('chat_images')
           .child(DateTime.now().millisecondsSinceEpoch.toString() + '.jpg');
-      await ref.putFile(imgFile).onComplete;
+      await ref.putFile(imgFile);
       final url = await ref.getDownloadURL();
 
-      await Firestore.instance
+      await FirebaseFirestore.instance
           .collection('chats')
-          .document(
+          .doc(
             documentId,
           )
           .collection('messages')
@@ -184,7 +184,7 @@ class AdProvider with ChangeNotifier {
         'receiverId': receiverId,
         'timeStamp': ts,
       });
-      await Firestore.instance.collection('chats').document(documentId).setData(
+      await FirebaseFirestore.instance.collection('chats').doc(documentId).set(
         {
           'docId': documentId,
           'lastMessage': 'Photo',
@@ -196,7 +196,7 @@ class AdProvider with ChangeNotifier {
   }
 
   Future<void> pushToFirebase() async {
-    var userId = await FirebaseAuth.instance.currentUser();
+    var userId = FirebaseAuth.instance.currentUser;
     var emailForImage = userId.email;
     var uid = userId.uid;
     final createdAt = Timestamp.now();
@@ -216,7 +216,7 @@ class AdProvider with ChangeNotifier {
             .child(emailForImage)
             .child(imageChildPath)
             .child(DateTime.now().millisecondsSinceEpoch.toString() + '.jpg');
-        await ref.putFile(_adModel.images[i]).onComplete;
+        await ref.putFile(_adModel.images[i]);
         final url = await ref.getDownloadURL();
         downloadedPaths.add(url);
       }
@@ -230,17 +230,17 @@ class AdProvider with ChangeNotifier {
             .child(emailForImage)
             .child(imageChildPath)
             .child(DateTime.now().millisecondsSinceEpoch.toString() + '.jpg');
-        StorageUploadTask uploadTask = ref.putData(imageData);
-        final url = await (await uploadTask.onComplete).ref.getDownloadURL();
+        UploadTask uploadTask = ref.putData(imageData);
+        final url = await (await uploadTask).ref.getDownloadURL();
         downloadedPaths.add(url);
       }
     }
-    await Firestore.instance
+    await FirebaseFirestore.instance
         .collection('products')
-        .document(
+        .doc(
           id.toString(),
         )
-        .setData({
+        .set({
       'id': id,
       'createdAt': createdAt,
       'price': _adModel.price,

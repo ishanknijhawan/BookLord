@@ -46,7 +46,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
       },
     );
 
-    fcm.subscribeToTopic('chats');
+    //fcm.subscribeToTopic('chats');
 
     _pages = [
       {
