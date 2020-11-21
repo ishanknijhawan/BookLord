@@ -75,53 +75,62 @@ class _UsersChatScreenState extends State<UsersChatScreen> {
                         margin: EdgeInsets.symmetric(
                           vertical: 0,
                         ),
-                        child: ListTile(
-                            key: ValueKey(receiverId),
-                            leading: receiverProfile == ''
-                                ? Container(
-                                    width: 50,
-                                    height: 50,
-                                    decoration:
-                                        BoxDecoration(shape: BoxShape.circle),
-                                    child: SvgPicture.asset(
-                                        'assets/images/boy.svg'),
-                                  )
-                                : CircleAvatar(
-                                    radius: 25,
-                                    backgroundImage:
-                                        NetworkImage(receiverProfile),
-                                  ),
-                            title: Text(
-                              receiverName,
-                              style: TextStyle(fontSize: 20),
-                            ),
-                            subtitle: Text(
-                              documents[index]['senderId'] == receiverId
-                                  ? documents[index]['lastMessage']
-                                  : 'You: ${documents[index]['lastMessage']}',
-                            ),
-                            trailing: Text(
-                              DateFormat('HH:mm').format(
-                                (documents[index]['timeStamp'] as Timestamp)
-                                    .toDate(),
+                        child: Column(
+                          children: [
+                            ListTile(
+                              key: ValueKey(receiverId),
+                              leading: receiverProfile == ''
+                                  ? Container(
+                                      width: 50,
+                                      height: 50,
+                                      decoration:
+                                          BoxDecoration(shape: BoxShape.circle),
+                                      child: SvgPicture.asset(
+                                          'assets/images/boy.svg'),
+                                    )
+                                  : CircleAvatar(
+                                      radius: 25,
+                                      backgroundImage:
+                                          NetworkImage(receiverProfile),
+                                    ),
+                              title: Text(
+                                receiverName,
+                                style: TextStyle(fontSize: 20),
                               ),
-                              style: TextStyle(
-                                color: Colors.grey[600],
+                              subtitle: Text(
+                                documents[index]['senderId'] == receiverId
+                                    ? documents[index]['lastMessage']
+                                    : 'You: ${documents[index]['lastMessage']}',
                               ),
-                            ),
-                            onTap: () {
-                              print('receiverName is $receiverName');
-                              Navigator.of(context).pushNamed(
-                                ChatScreen.routeName,
-                                arguments: UserModel(
-                                  userName: receiverData.data['name'],
-                                  email: receiverData.data['email'],
-                                  profilePicture:
-                                      receiverData.data['profilePicture'],
-                                  uid: receiverData.data['uid'],
+                              trailing: Text(
+                                DateFormat('HH:mm').format(
+                                  (documents[index]['timeStamp'] as Timestamp)
+                                      .toDate(),
                                 ),
-                              );
-                            }),
+                                style: TextStyle(
+                                  color: Colors.grey[600],
+                                ),
+                              ),
+                              onTap: () {
+                                print('receiverName is $receiverName');
+                                Navigator.of(context).pushNamed(
+                                  ChatScreen.routeName,
+                                  arguments: UserModel(
+                                    userName: receiverData.data['name'],
+                                    email: receiverData.data['email'],
+                                    profilePicture:
+                                        receiverData.data['profilePicture'],
+                                    uid: receiverData.data['uid'],
+                                  ),
+                                );
+                              },
+                            ),
+                            Divider(
+                              indent: 16,
+                              endIndent: 16,
+                            ),
+                          ],
+                        ),
                       );
                     });
               } else
