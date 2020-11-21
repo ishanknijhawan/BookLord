@@ -41,10 +41,10 @@ class AdProvider with ChangeNotifier {
     final userData =
         await FirebaseFirestore.instance.collection('users').doc(uid).get();
     final user = UserModel();
-    user.email = userData.data()['email'];
-    user.userName = userData.data()['name'];
-    user.profilePicture = userData.data()['profilePicture'];
-    user.uid = userData.data()['uid'];
+    user.email = userData['email'];
+    user.userName = userData['name'];
+    user.profilePicture = userData['profilePicture'];
+    user.uid = userData['uid'];
 
     return user;
   }

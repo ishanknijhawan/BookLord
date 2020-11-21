@@ -67,23 +67,23 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     UserModel userData;
     final args =
         ModalRoute.of(context).settings.arguments as Map<String, dynamic>;
-    final DocumentSnapshot documents = args['documents'];
-    docId = documents.data()['id'];
+    final dynamic documents = args['documents'];
+    docId = documents['id'];
     final bool isMe = args['isMe'];
-    isSold = documents.data()['isSold'];
-    final images = documents.data()['images'] as List<dynamic>;
-    Timestamp dateTime = documents.data()['createdAt'];
+    isSold = documents['isSold'];
+    final images = documents['images'] as List<dynamic>;
+    Timestamp dateTime = documents['createdAt'];
 
     mapUrl =
         Provider.of<AdProvider>(context, listen: false).getLocationFromLatLang(
-      latitude: (documents.data()['location']['latitude'] as double),
-      longitude: (documents.data()['location']['longitude'] as double),
+      latitude: (documents['location']['latitude'] as double),
+      longitude: (documents['location']['longitude'] as double),
     );
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          documents.data()['title'],
+          documents['title'],
         ),
         actions: isMe
             ? [
@@ -167,15 +167,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       ),
       body: FutureBuilder(
           future: Provider.of<AdProvider>(context).getUserDataFromUid(
-            documents.data()['uid'],
+            documents['uid'],
           ),
           builder: (context, userSnapshot) {
             userData = userSnapshot.data;
             return FutureBuilder(
                 future: Provider.of<AdProvider>(context, listen: false)
                     .getDistanceFromCoordinates(
-                  documents.data()['location']['latitude'] as double,
-                  documents.data()['location']['longitude'] as double,
+                  documents['location']['latitude'] as double,
+                  documents['location']['longitude'] as double,
                 ),
                 builder: (context, locSnapshot) {
                   return Padding(
@@ -187,7 +187,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           Stack(
                             children: [
                               Hero(
-                                tag: documents.data()['id'],
+                                tag: documents['id'],
                                 child: CarouselSlider.builder(
                                   itemCount: images.length,
                                   itemBuilder: (ctx, i) {
@@ -245,7 +245,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 16),
                             child: Text(
-                              documents.data()['description'],
+                              documents['description'],
                               style: TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 18,
@@ -258,7 +258,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 16),
                             child: Text(
-                              isSold ? 'Sold' : '₹${documents.data()['price']}',
+                              isSold ? 'Sold' : '₹${documents['price']}',
                               style: TextStyle(
                                 fontSize: 22,
                                 fontWeight: FontWeight.bold,
@@ -270,7 +270,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             child: Column(
                               children: [
                                 Text(
-                                  'Author: ${documents.data()['author']}',
+                                  'Author: ${documents['author']}',
                                   style: TextStyle(
                                       fontFamily: 'Poppins', fontSize: 18),
                                 )
@@ -307,7 +307,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                           padding: EdgeInsets.symmetric(
                                               horizontal: 4),
                                           child: Text(
-                                            documents.data()['condition'] +
+                                            documents['condition'] +
                                                 ' condition',
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
@@ -421,26 +421,32 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               ),
                               child: Row(
                                 children: [
-                                  userSnapshot.data.profilePicture == ''
-                                      ? Container(
-                                          height: 60,
-                                          width: 60,
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            border: Border.all(
-                                              color: Colors.black,
-                                              width: 1,
-                                            ),
-                                          ),
-                                          child: SvgPicture.asset(
-                                              'assets/images/boy.svg'),
+                                  userSnapshot.connectionState ==
+                                          ConnectionState.waiting
+                                      ? Center(
+                                          child: CircularProgressIndicator(),
                                         )
-                                      : CircleAvatar(
-                                          radius: 30,
-                                          backgroundImage: NetworkImage(
-                                            userSnapshot.data.profilePicture,
-                                          ),
-                                        ),
+                                      : userSnapshot.data.profilePicture == ''
+                                          ? Container(
+                                              height: 60,
+                                              width: 60,
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                border: Border.all(
+                                                  color: Colors.black,
+                                                  width: 1,
+                                                ),
+                                              ),
+                                              child: SvgPicture.asset(
+                                                  'assets/images/boy.svg'),
+                                            )
+                                          : CircleAvatar(
+                                              radius: 30,
+                                              backgroundImage: NetworkImage(
+                                                userSnapshot
+                                                    .data.profilePicture,
+                                              ),
+                                            ),
                                   SizedBox(
                                     width: 25,
                                   ),
@@ -455,15 +461,21 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                           fontFamily: 'Poppins',
                                         ),
                                       ),
-                                      Text(
-                                        isMe
-                                            ? 'You'
-                                            : userSnapshot.data.userName,
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          fontFamily: 'Poppins',
-                                        ),
-                                      ),
+                                      userSnapshot.connectionState ==
+                                              ConnectionState.waiting
+                                          ? Center(
+                                              child:
+                                                  CircularProgressIndicator(),
+                                            )
+                                          : Text(
+                                              isMe
+                                                  ? 'You'
+                                                  : userSnapshot.data.userName,
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                                fontFamily: 'Poppins',
+                                              ),
+                                            ),
                                     ],
                                   )
                                 ],

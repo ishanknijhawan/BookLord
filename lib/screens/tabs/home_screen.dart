@@ -20,10 +20,9 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final uid = FirebaseAuth.instance.currentUser.uid;
   List<dynamic> documents = [];
-  List<dynamic> prods = [];
+  List<AdModel> prods = [];
   bool isProd = false;
   double distance;
-  AdLocation loc = AdLocation();
 
   @override
   Widget build(BuildContext context) {
@@ -58,28 +57,30 @@ class _HomeScreenState extends State<HomeScreen> {
                         final location = Location();
                         print('coming here 111');
                         final locData = await location.getLocation();
-                        loc.latitude = locData.latitude;
-                        loc.longitude = locData.longitude;
 
-                        print('locations is ${loc.latitude},${loc.longitude}');
+                        print(
+                            'locations is ${locData.latitude},${locData.longitude}');
 
-                        prods.map(
-                          (e) {
-                            print(e);
-                            distance = Provider.of<AdProvider>(context)
-                                .getDistanceFromCoordinates2(
-                              e.location.latitude,
-                              e.location.latitude,
-                              loc.latitude,
-                              loc.longitude,
-                            );
-                            e.fromLoc = distance;
-                            print('distance is $distance');
-                          },
-                        );
+                        for (int i = 0; i < prods.length; i++) {
+                          prods[i].fromLoc =
+                              Provider.of<AdProvider>(context, listen: false)
+                                  .getDistanceFromCoordinates2(
+                            prods[i].location.latitude,
+                            prods[i].location.longitude,
+                            locData.latitude,
+                            locData.longitude,
+                          );
+                          print('distance is ${(prods[i].fromLoc)}');
+                        }
+
                         prods.sort((m1, m2) {
                           return m1.fromLoc.compareTo(m2.fromLoc);
                         });
+                        print(
+                          prods.map(
+                            (e) => print('final distance is ${e.fromLoc}'),
+                          ),
+                        );
                         setState(() {
                           isProd = true;
                         });
@@ -129,7 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 itemCount: prods.length,
                 itemBuilder: (context, i) {
                   dynamic document = {
-                    'id': prods[i].id as int,
+                    'id': prods[i].id,
                     'title': prods[i].title,
                     'author': prods[i].author,
                     'description': prods[i].description,
@@ -187,28 +188,30 @@ class _HomeScreenState extends State<HomeScreen> {
 
                 documents = snapshot.data.documents;
 
-                for (int i = 0; i < documents.length; i++) {
-                  prods.add(AdModel(
-                    id: documents[i]['id'].toString(),
-                    createdAt: documents[i]['createdAt'],
-                    price: documents[i]['price'],
-                    title: documents[i]['title'],
-                    author: documents[i]['author'],
-                    categories: documents[i]['categories'],
-                    description: documents[i]['description'],
-                    images: documents[i]['images'],
-                    userId: documents[i]['uid'],
-                    location: AdLocation(
-                      latitude: documents[i]['location']['latitude'],
-                      longitude: documents[i]['location']['longitude'],
-                      address: documents[i]['location']['address'],
-                    ),
-                    condition: documents[i]['condition'],
-                    isSold: documents[i]['isSold'],
-                    isFav: documents[i]['isFav'],
-                    fromLoc: 0.0,
-                  ));
-                }
+                prods = documents
+                    .map<AdModel>(
+                      (documents) => AdModel(
+                        id: documents['id'].toString(),
+                        createdAt: documents['createdAt'],
+                        price: documents['price'],
+                        title: documents['title'],
+                        author: documents['author'],
+                        categories: documents['categories'],
+                        description: documents['description'],
+                        images: documents['images'],
+                        userId: documents['uid'],
+                        location: AdLocation(
+                          latitude: documents['location']['latitude'],
+                          longitude: documents['location']['longitude'],
+                          address: documents['location']['address'],
+                        ),
+                        condition: documents['condition'],
+                        isSold: documents['isSold'],
+                        isFav: documents['isFav'],
+                        fromLoc: 0.0,
+                      ),
+                    )
+                    .toList();
 
                 if (snapshot.data.documents.length == 0) {
                   return Center(
