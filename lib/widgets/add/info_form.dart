@@ -17,6 +17,7 @@ class _BookInfoFormState extends State<BookInfoForm> {
   String desc = '';
   String author = '';
   String _prevValue = '';
+
   Map<String, String> sliderValueMap = {
     '0': 'Ughh',
     '25': 'Managable',
@@ -87,6 +88,7 @@ class _BookInfoFormState extends State<BookInfoForm> {
                             return 'Title should be more than 8 characters';
                           }
                         },
+                        textInputAction: TextInputAction.next,
                         decoration: InputDecoration(
                           labelText: 'Title',
                           border: OutlineInputBorder(
@@ -112,6 +114,7 @@ class _BookInfoFormState extends State<BookInfoForm> {
                             return 'Aurhor name should be more than 7 characters';
                           }
                         },
+                        textInputAction: TextInputAction.next,
                         decoration: InputDecoration(
                           labelText: 'Author',
                           border: OutlineInputBorder(

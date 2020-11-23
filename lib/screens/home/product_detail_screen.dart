@@ -9,6 +9,7 @@ import 'package:chat_app/models/ad_location.dart';
 import 'package:chat_app/provider/ad_provider.dart';
 import 'package:chat_app/screens/chats/chat_screen.dart';
 import 'package:chat_app/models/user.dart';
+import 'package:chat_app/screens/add/maps_screen.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   static const routeName = './product_detail_screen';
@@ -482,25 +483,58 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               ),
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Container(
-                              width: double.infinity,
-                              height: 200,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                border: Border.all(
-                                  color: Colors.grey,
-                                  width: 1,
-                                ),
+                          if ((documents['location']['address'] as String)
+                              .isNotEmpty)
+                            Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    'Address: ${documents['location']['address']}',
+                                    style: TextStyle(
+                                        fontFamily: 'Poppins', fontSize: 18),
+                                  )
+                                ],
                               ),
-                              child: Center(
-                                child: mapUrl.isEmpty
-                                    ? Text('No location')
-                                    : Image.network(
-                                        mapUrl,
-                                        fit: BoxFit.cover,
-                                      ),
+                            ),
+                          GestureDetector(
+                            onTap: () => Navigator.of(context).push(
+                              MaterialPageRoute(
+                                fullscreenDialog: true,
+                                builder: (context) {
+                                  return GoogleMapScreen(
+                                    placeLocation: AdLocation(
+                                      latitude: documents['location']
+                                          ['latitude'] as double,
+                                      longitude: documents['location']
+                                          ['longitude'] as double,
+                                      address: '',
+                                    ),
+                                    isEditable: false,
+                                  );
+                                },
+                              ),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Container(
+                                width: double.infinity,
+                                height: 200,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  border: Border.all(
+                                    color: Colors.grey,
+                                    width: 1,
+                                  ),
+                                ),
+                                child: Center(
+                                  child: mapUrl.isEmpty
+                                      ? Text('No location')
+                                      : Image.network(
+                                          mapUrl,
+                                          fit: BoxFit.cover,
+                                        ),
+                                ),
                               ),
                             ),
                           ),

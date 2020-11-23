@@ -126,6 +126,7 @@ class _UsersChatScreenState extends State<UsersChatScreen> {
                               },
                             ),
                             Divider(
+                              height: 5,
                               indent: 16,
                               endIndent: 16,
                             ),
