@@ -24,9 +24,7 @@ class _FavoriteAdsScreenState extends State<FavoriteAdsScreen> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(
-            child: CircularProgressIndicator(
-              backgroundColor: Theme.of(context).primaryColor,
-            ),
+            child: CircularProgressIndicator(),
           );
         }
         var documents = snapshot.data.documents;

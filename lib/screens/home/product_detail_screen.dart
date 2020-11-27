@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:chat_app/models/ad_location.dart';
 import 'package:chat_app/provider/ad_provider.dart';
@@ -195,9 +196,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                     return Container(
                                       width: double.infinity,
                                       height: 200,
-                                      child: Image.network(
-                                        images[i],
+                                      child: CachedNetworkImage(
+                                        imageUrl: images[i],
                                         fit: BoxFit.cover,
+                                        errorWidget: (context, url, error) =>
+                                            Icon(Icons.error),
                                       ),
                                     );
                                   },
@@ -349,10 +352,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                                   ConnectionState.waiting
                                               ? Center(
                                                   child:
-                                                      CircularProgressIndicator(
-                                                    backgroundColor:
-                                                        Colors.black,
-                                                  ),
+                                                      CircularProgressIndicator(),
                                                 )
                                               : Text(
                                                   (locSnapshot.data as double) <

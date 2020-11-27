@@ -149,9 +149,7 @@ class _AuthFormState extends State<AuthForm> {
                   ),
                   if (widget.isLoading)
                     Center(
-                      child: CircularProgressIndicator(
-                        backgroundColor: Theme.of(context).primaryColor,
-                      ),
+                      child: CircularProgressIndicator(),
                     ),
                   if (!widget.isLoading)
                     RaisedButton(

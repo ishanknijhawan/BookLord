@@ -11,6 +11,7 @@ import 'package:chat_app/screens/home/search.dart';
 import 'package:chat_app/provider/ad_provider.dart';
 import 'package:chat_app/models/ad_model.dart';
 import 'package:chat_app/models/ad_location.dart';
+import 'package:chat_app/widgets/home/filter.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -23,6 +24,24 @@ class _HomeScreenState extends State<HomeScreen> {
   List<AdModel> prods = [];
   bool isProd = false;
   double distance;
+  RangeValues range = RangeValues(0, 2000);
+
+  void setFilters(RangeValues rv) {
+    print('coming here set filters 2');
+    print('start is ${rv.start}');
+    setState(() {
+      range = rv;
+      prods = prods.where(
+        (element) {
+          print('element price is ${element.price}');
+          print('range start is ${range.start} and ${range.end}');
+          return (element.price >= range.start) && (element.price <= range.end);
+        },
+      ).toList();
+      isProd = true;
+    });
+    Navigator.of(context).pop();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +49,21 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: Text('Home'),
         actions: [
+          IconButton(
+            icon: Icon(Icons.filter_alt_outlined),
+            onPressed: () {
+              return showDialog(
+                context: context,
+                builder: (context) {
+                  return Dialog(
+                    child: Filter(
+                      setFilters,
+                    ),
+                  );
+                },
+              );
+            },
+          ),
           IconButton(
             icon: Icon(
               Icons.sort_outlined,
@@ -172,9 +206,7 @@ class _HomeScreenState extends State<HomeScreen> {
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(
-                    child: CircularProgressIndicator(
-                      backgroundColor: Theme.of(context).primaryColor,
-                    ),
+                    child: CircularProgressIndicator(),
                   );
                 }
 

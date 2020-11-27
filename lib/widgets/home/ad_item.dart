@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:chat_app/screens/home/product_detail_screen.dart';
 
@@ -33,8 +34,9 @@ class _AdItemState extends State<AdItem> {
         child: GridTile(
           child: Hero(
             tag: widget.documents['id'],
-            child: Image.network(
-              widget.documents['images'][0],
+            child: CachedNetworkImage(
+              imageUrl: widget.documents['images'][0],
+              errorWidget: (context, url, error) => Icon(Icons.error),
               fit: BoxFit.cover,
             ),
           ),

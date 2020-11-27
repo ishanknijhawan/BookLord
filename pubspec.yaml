@@ -49,6 +49,7 @@ dependencies:
     firebase_core: ^0.5.2
     http: ^0.12.2
     google_maps_flutter: ^1.0.6
+    cached_network_image: ^2.3.3
 
 dev_dependencies:
     flutter_test:

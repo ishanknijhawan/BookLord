@@ -71,9 +71,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       builder: (ctx, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(
-            child: CircularProgressIndicator(
-              backgroundColor: Theme.of(context).primaryColor,
-            ),
+            child: CircularProgressIndicator(),
           );
         }
 

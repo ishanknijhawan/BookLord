@@ -187,9 +187,7 @@ class _PriceAndLocationScreenState extends State<PriceAndLocationScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    CircularProgressIndicator(
-                      backgroundColor: Theme.of(context).primaryColor,
-                    ),
+                    CircularProgressIndicator(),
                     SizedBox(
                       height: 10,
                     ),

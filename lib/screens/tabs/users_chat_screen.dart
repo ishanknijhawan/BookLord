@@ -41,9 +41,7 @@ class _UsersChatScreenState extends State<UsersChatScreen> {
         builder: (context, snapShot) {
           if (snapShot.connectionState == ConnectionState.waiting) {
             return Center(
-              child: CircularProgressIndicator(
-                backgroundColor: Theme.of(context).primaryColor,
-              ),
+              child: CircularProgressIndicator(),
             );
           }
           var documents = snapShot.data.documents;
