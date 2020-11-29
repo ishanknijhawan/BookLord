@@ -1,12 +1,6 @@
-<h1><p align="center">IWS Project</p></h1>
+<h1><p align="center">BookLord</p></h1>
 
-<h5><center>Ishank Nijhawan</center></h5>
-
-<h5><center>1710110150</center></h5>
-
-<h3><center>Title: BookLord</center></h3>
-
-Download the app from [here](https://drive.google.com/file/d/1fs7fQYBI5EztuU2DuMlAVhHwpaDOJl0s/view?usp=sharing)
+Download the app from [here](https://drive.google.com/file/d/1tkp1OXflFCc4peFx3mF5z7tJvo9CvRGk/view?usp=sharing)
 
 [TOC]
 
